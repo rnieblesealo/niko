@@ -18,4 +18,8 @@ else()
     target_link_libraries(${PROJECT_NAME} raylib)
 endif()
 
+target_include_directories(raylib_game PRIVATE 
+  include
+)
+
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})

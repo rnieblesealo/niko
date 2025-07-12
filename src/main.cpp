@@ -13,20 +13,18 @@ const Vector2 DIRECTIONS_4[4]{
     {-1, 0},
     {1, 0}}; // Used in direction-related iterative calculations
 
-const float JUMP_MIN_HEIGHT       = 50;
-const float JUMP_INITIAL_VELOCITY = 8;
-const float JUMP_DROP_VELOCITY    = 2;
+const float JUMP_INITIAL_VELOCITY = 10;
 const float GRAVITY = -0.5; // Acceleration applied to jump velocity
 
 const uint32_t FLOOR_Y_POS = 320;
 
 } // namespace
 
-namespace J4NK {
+namespace MY_COLORS {
 const Color NK_BLUE = {0x17, 0x73, 0xb8};
-}
+} // namespace MY_COLORS
 
-using namespace J4NK;
+using namespace MY_COLORS;
 
 class Niko {
 private:
@@ -96,17 +94,21 @@ private:
   }
 
   void updateJump() {
+    position.y += this->jump_velocity;
     float feet_pos = this->position.y + 35;
 
-    if (feet_pos > FLOOR_Y_POS) {
-      this->is_grounded   = true;
-      this->jump_velocity = 0;
-      this->position.y    = FLOOR_Y_POS - 35;
-    }
-
-    else if (!is_grounded) {
+    if (!is_grounded) {
       this->jump_velocity -= GRAVITY;
-      this->position.y += jump_velocity;
+
+      if (feet_pos + 2.0f > FLOOR_Y_POS) {
+        this->jump_velocity = 2;
+      }
+
+      if (feet_pos >= FLOOR_Y_POS) {
+        this->jump_velocity = 0;
+        this->position.y    = FLOOR_Y_POS - 35;
+        this->is_grounded   = true;
+      }
     }
 
     /*
@@ -211,7 +213,12 @@ int main(void) {
   const uint32_t impact_font_size    = 32;
   const uint32_t impact_font_spacing = 2;
 
-  /* === Clouds === */
+  /* === Scene === */
+
+  const Texture2D sand =
+      LoadTexture(std::filesystem::path("assets/sand.png").c_str());
+
+  float floor_chunk_x_positions[2] = {0, static_cast<float>(sand.width)};
 
   const Texture2D cloud =
       LoadTexture(std::filesystem::path("assets/cloud.png").c_str());
@@ -244,6 +251,18 @@ int main(void) {
     niko.move();
     niko.advanceFrames();
 
+    // Move the floor to create moving effect
+    const float speed = 5;
+    for (auto &x_pos : floor_chunk_x_positions) {
+      x_pos -= speed;
+      if (x_pos < -sand.width) {
+        x_pos =
+            SCREEN_WIDTH -
+            (abs(x_pos) -
+             abs(sand.width)); // Compensate for the amount of space we went over the shift point
+      }
+    }
+
     // ===================================
     // Game Rendering
     // ===================================
@@ -251,10 +270,6 @@ int main(void) {
     BeginDrawing();
 
     ClearBackground(NK_BLUE);
-
-    // Draw the floor
-    DrawLineEx(Vector2{0, FLOOR_Y_POS}, Vector2{SCREEN_WIDTH, FLOOR_Y_POS}, 4,
-               GREEN);
 
     // Draw a bunch of fuckin clouds
 
@@ -266,6 +281,11 @@ int main(void) {
     // Draw each cloud at its specified pos
     for (const auto &pos : cloud_positions) {
       DrawTextureEx(cloud, pos, 0, SPRITE_SCALE_FACTOR, faded_white);
+    }
+
+    // Draw the sand floors
+    for (const auto &x_pos : floor_chunk_x_positions) {
+      DrawTexture(sand, x_pos, FLOOR_Y_POS, WHITE);
     }
 
     // Draw the title
@@ -294,7 +314,7 @@ int main(void) {
       DrawTextEx(impact_font, title_text.c_str(),
                  Vector2{title_dest_rect.x + outline_thickness_width * dir.x,
                          title_dest_rect.y + outline_thickness_width * dir.y},
-                 impact_font_size, impact_font_spacing, DARKGRAY);
+                 impact_font_size, impact_font_spacing, BLACK);
     }
 
     DrawTextEx(impact_font, title_text.c_str(),
