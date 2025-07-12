@@ -2,12 +2,7 @@ messing around with raylb
 
 check it
 
-<img
-    src="github/niko.png"
-    style="
-        image-rendering: 
-        pixelated; aspect-ratio: 1/1;"
-    width=120/>
+![fukin niko](github/niko.png)
 
 this is Niko the Nicotine-Addicted Punk Salamander
 
