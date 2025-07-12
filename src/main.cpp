@@ -13,6 +13,13 @@ const Vector2 DIRECTIONS_4[4]{
     {-1, 0},
     {1, 0}}; // Used in direction-related iterative calculations
 
+const float JUMP_MIN_HEIGHT       = 50;
+const float JUMP_INITIAL_VELOCITY = 8;
+const float JUMP_DROP_VELOCITY    = 2;
+const float GRAVITY = -0.5; // Acceleration applied to jump velocity
+
+const uint32_t FLOOR_Y_POS = 320;
+
 } // namespace
 
 namespace J4NK {
@@ -36,7 +43,7 @@ private:
 
   uint32_t current_frame = 0;
   uint32_t frame_counter = 0;
-  Vector2 position       = {100, 270};
+  Vector2 position       = {100, 100};
 
   /**
    * @note  Only height gets divided by frame count to "cut up"
@@ -53,12 +60,15 @@ private:
   Rectangle draw_rect   = {0, 0, 0, 0};
   Vector2 origin_offset = {scaled_width / 2, scaled_height / 2};
 
+  /* === Moving === */
+
+  Vector2 velocity = {0, 0};
+
   /* === Jumping === */
 
-  bool is_jumping     = false;
   bool is_grounded    = false;
+  float jump_velocity = 0;
   uint32_t jump_timer = 0;
-  Rectangle feet      = {0, 0, 0, 0};
 
   /* === Helper Functions === */
 
@@ -79,6 +89,38 @@ private:
       DrawTexturePro(spritesheet, frame_rect, outline, origin_offset, 0, BLACK);
     }
   }
+
+  void startJump() {
+    this->jump_velocity = -JUMP_INITIAL_VELOCITY;
+    this->is_grounded   = false;
+  }
+
+  void updateJump() {
+    float feet_pos = this->position.y + 35;
+
+    if (feet_pos > FLOOR_Y_POS) {
+      this->is_grounded   = true;
+      this->jump_velocity = 0;
+      this->position.y    = FLOOR_Y_POS - 35;
+    }
+
+    else if (!is_grounded) {
+      this->jump_velocity -= GRAVITY;
+      this->position.y += jump_velocity;
+    }
+
+    /*
+    // Reach max jump height
+    if (this->position.y < JUMP_MAX_HEIGHT) {
+      this->endJump();
+    }
+
+    // At ground level
+    if (this->position.y > FLOOR_Y_POS) {
+      this->reset();
+    }
+    */
+  };
 
 public:
   Niko() = default;
@@ -105,27 +147,14 @@ public:
   }
 
   void move() {
-    /**
-     * @note feet rect is initially identical to draw_rect
-     *
-     * We apply custom width and height and apply some offsets to make them fit the player's sprite better
-     *
-     * These values are entirely eyeballed!
-     */
-
-    const uint32_t feet_width  = 40;
-    const uint32_t feet_height = 10; // How tall the feet rect is
-
-    const int32_t feet_y_offset = -12;
-    const int32_t feet_x_offset = -9;
-
-    feet = {position.x - draw_rect.width / 2 + feet_width + feet_x_offset,
-            position.y + draw_rect.height / 2 - feet_height + feet_y_offset,
-            feet_width, feet_height};
-
-    if (debug) {
-      DrawRectangleLinesEx(feet, 2, YELLOW);
+    // ---- CHROME DINO JUMP
+    if (IsKeyPressed(KEY_SPACE)) {
+      if (this->is_grounded) {
+        startJump();
+      }
     }
+
+    updateJump();
   }
 
   void render() {
@@ -182,8 +211,6 @@ int main(void) {
   const uint32_t impact_font_size    = 32;
   const uint32_t impact_font_spacing = 2;
 
-  /* === Floor === */
-
   /* === Clouds === */
 
   const Texture2D cloud =
@@ -224,6 +251,10 @@ int main(void) {
     BeginDrawing();
 
     ClearBackground(NK_BLUE);
+
+    // Draw the floor
+    DrawLineEx(Vector2{0, FLOOR_Y_POS}, Vector2{SCREEN_WIDTH, FLOOR_Y_POS}, 4,
+               GREEN);
 
     // Draw a bunch of fuckin clouds
 
