@@ -1,6 +1,9 @@
 #include "raylib.h"
+#include <algorithm>
+#include <array>
 #include <cstdint>
 #include <filesystem>
+#include <random>
 
 namespace {
 const uint32_t SCREEN_WIDTH       = 400;
@@ -37,7 +40,7 @@ private:
   const Texture2D spritesheet =
       LoadTexture(std::filesystem::path("assets/niko.png").c_str());
   const uint32_t frame_count = 8;
-  const uint32_t frame_speed = 8; // Frames per second
+  const uint32_t frame_speed = 7; // Frames per second
 
   uint32_t current_frame = 0;
   uint32_t frame_counter = 0;
@@ -68,6 +71,14 @@ private:
   float jump_velocity = 0;
   uint32_t jump_timer = 0;
 
+  /* === Sounds === */
+
+  const Sound sfx_jump =
+      LoadSound(std::filesystem::path("assets/jump.wav").c_str());
+
+  const Sound sfx_land =
+      LoadSound(std::filesystem::path("assets/land.wav").c_str());
+
   /* === Helper Functions === */
 
   void renderOutline() {
@@ -91,6 +102,16 @@ private:
   void startJump() {
     this->jump_velocity = -JUMP_INITIAL_VELOCITY;
     this->is_grounded   = false;
+
+    PlaySound(sfx_jump);
+  }
+
+  void endJump() {
+    this->jump_velocity = 0;
+    this->position.y    = FLOOR_Y_POS - 35;
+    this->is_grounded   = true;
+
+    PlaySound(sfx_land);
   }
 
   void updateJump() {
@@ -105,9 +126,7 @@ private:
       }
 
       if (feet_pos >= FLOOR_Y_POS) {
-        this->jump_velocity = 0;
-        this->position.y    = FLOOR_Y_POS - 35;
-        this->is_grounded   = true;
+        endJump();
       }
     }
 
@@ -203,6 +222,7 @@ public:
 
 int main(void) {
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Niko");
+  InitAudioDevice();
 
   SetTargetFPS(60);
 
@@ -238,6 +258,35 @@ int main(void) {
   Niko niko;
   niko.debug = false;
 
+  /* === Obstacles === */
+
+  const std::array<Texture2D, 3> obs_short = {
+      LoadTexture(std::filesystem::path("assets/tate.png").c_str()),
+      LoadTexture(std::filesystem::path("assets/trump.png").c_str()),
+      LoadTexture(std::filesystem::path("assets/netanyahu.png").c_str()),
+  };
+
+  std::vector<std::pair<uint32_t, Rectangle>> obstacles{};
+
+  const uint32_t obs_small_width     = 60;
+  const uint32_t obs_small_height    = 60;
+  const uint32_t obstacle_spawn_rate = 1; // Obstacles per second
+  uint32_t obstacle_spawn_timer      = 0;
+
+  // Init RNG engine seeded with time
+  std::mt19937 rngEngine(static_cast<uint32_t>(
+      std::chrono::system_clock::now().time_since_epoch().count()));
+
+  // Create distribution of ints
+  std::uniform_int_distribution<std::size_t> spawnDistr(
+      0, obs_short.size() - 1); // Careful! This is inclusive
+
+  // Create Bernoulli (True or False) distribution with spawn chance
+  float spawn_chance = 0.75;
+  std::bernoulli_distribution flip_coin(spawn_chance);
+
+  SetTraceLogLevel(LOG_ALL);
+
   while (!WindowShouldClose()) {
     /**
      * @note Update logic goes before render! When rendering, we want the most
@@ -252,7 +301,7 @@ int main(void) {
     niko.advanceFrames();
 
     // Move the floor to create moving effect
-    const float speed = 5;
+    const float speed = 7;
     for (auto &x_pos : floor_chunk_x_positions) {
       x_pos -= speed;
       if (x_pos < -sand.width) {
@@ -263,18 +312,52 @@ int main(void) {
       }
     }
 
+    // Spawn obstacles
+    obstacle_spawn_timer++;
+
+    if (obstacle_spawn_timer >= (TARGET_FPS / obstacle_spawn_rate)) {
+      // Flip a coin; there is an x chance we will spawn
+      bool should_spawn = flip_coin(rngEngine);
+      if (should_spawn) {
+        int obstacle_texture         = static_cast<int>(spawnDistr(rngEngine));
+        Rectangle obstacle_draw_rect = Rectangle{
+            SCREEN_WIDTH + obs_small_width, FLOOR_Y_POS - obs_small_height,
+            obs_small_width, obs_small_height};
+
+        obstacles.push_back({obstacle_texture, obstacle_draw_rect});
+      }
+
+      obstacle_spawn_timer = 0;
+    }
+
+    // Move obstacles
+    for (auto &obstacle : obstacles) {
+      Rectangle &draw_dest = obstacle.second;
+      draw_dest.x -= speed;
+    }
+
+    // Delete offscreen obstacles
+    // NOTE: Lambda function in C++! Neat; the [&] specifies we capture args by reference
+    obstacles.erase(std::remove_if(obstacles.begin(), obstacles.end(),
+                                   [&](const auto &obstacle) {
+                                     const Rectangle &draw_dest =
+                                         obstacle.second;
+                                     return draw_dest.x < -draw_dest.width;
+                                   }),
+                    obstacles.end());
+
     // ===================================
     // Game Rendering
     // ===================================
 
     BeginDrawing();
 
-    ClearBackground(NK_BLUE);
+    ClearBackground(BLACK);
 
     // Draw a bunch of fuckin clouds
 
     // Make a slightly transparent white to make the clouds fade off a bit
-    const uint8_t faded_white_alpha = 120; // Out of 255
+    const uint8_t faded_white_alpha = 30; // Out of 255
     Color faded_white               = WHITE;
     faded_white.a                   = faded_white_alpha;
 
@@ -286,6 +369,17 @@ int main(void) {
     // Draw the sand floors
     for (const auto &x_pos : floor_chunk_x_positions) {
       DrawTexture(sand, x_pos, FLOOR_Y_POS, WHITE);
+    }
+
+    // Draw the obstacles
+    for (const auto &obstacle : obstacles) {
+      const int &texture_index   = obstacle.first;
+      const Rectangle &draw_dest = obstacle.second;
+
+      DrawTextureEx(obs_short[texture_index], {draw_dest.x, draw_dest.y}, 0,
+                    static_cast<float>(obs_small_width) /
+                        obs_short[texture_index].width,
+                    WHITE);
     }
 
     // Draw the title
