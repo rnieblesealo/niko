@@ -7,12 +7,7 @@
 #include <random>
 #include <raylib.h>
 
-namespace MY_COLORS
-{
-const Color NK_BLUE = {0x17, 0x73, 0xb8};
-} // namespace MY_COLORS
-
-using namespace MY_COLORS;
+using namespace COLORPAL_12J4NK;
 
 class Niko
 {
