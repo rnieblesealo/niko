@@ -69,7 +69,7 @@ public:
 
   void move()
   {
-    if (IsKeyPressed(KEY_SPACE))
+    if (IsKeyDown(KEY_SPACE))
     {
       if (this->is_grounded)
       {
