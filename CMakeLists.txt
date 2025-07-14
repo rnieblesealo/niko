@@ -10,6 +10,7 @@ find_package(raylib REQUIRED)
 
 add_executable(${PROJECT_NAME} 
   src/main.cpp
+  src/spritesheet-renderer.cpp
 )
 
 if(APPLE)
