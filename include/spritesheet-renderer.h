@@ -3,6 +3,7 @@
 
 #include "raylib.h"
 #include <cstdint>
+#include <map>
 
 namespace
 {
@@ -11,6 +12,16 @@ namespace
  */
 const uint32_t DEFAULT_FPS = 8;
 } // namespace
+
+/**
+ * @brief Value object for an individual spritesheet
+ * Different spritesheets represent different animation states (running, jumping, crouching, etc.)
+ */
+typedef struct SPRITESHEET
+{
+  Texture2D &spritesheet;
+  uint32_t   frame_count;
+} SPRITESHEET;
 
 /**
  * @brief Manages and renders frames from a vertically stacked spritesheet.
@@ -26,12 +37,17 @@ class SPRITESHEET_RENDERER final
 {
 private:
   /**
-   * @brief Spritesheet texture containing all vertically-stacked frames
+   * @brief Contains animation states
    */
-  Texture2D &my_spritesheet;
+  std::map<std::string, SPRITESHEET const &> const &my_spritesheets;
 
   /**
-   * @brief Bounds of the current frame relative to the spritesheet
+   * @brief A reference to the active spritesheet
+   */
+  SPRITESHEET const *my_active_spritesheet;
+
+  /**
+   * @brief Rect of the current frame relative to the spritesheet
    */
   Rectangle my_frame_rect;
 
@@ -39,11 +55,6 @@ private:
    * @brief The animation speed in FPS
    */
   uint32_t my_fps;
-
-  /**
-   * @brief Amount of frames in the spritesheet
-   */
-  uint32_t my_frame_count;
 
   /**
    * @brief Counts elapsed game frames since last frame advance
@@ -61,6 +72,11 @@ private:
   bool should_render_outline;
 
   /**
+   * @brief Resets frame to the first one and clears counter and timer
+   */
+  void resetFrames();
+
+  /**
    * @brief Advances the spritesheet's animation
    */
   void advanceFrames();
@@ -74,18 +90,14 @@ private:
   void renderOutline(Rectangle &dest);
 
 public:
-  explicit SPRITESHEET_RENDERER(Texture2D &spritesheet, uint32_t frame_count)
-      : my_spritesheet(spritesheet)
-      , my_frame_count(frame_count)
+  explicit SPRITESHEET_RENDERER(std::map<std::string, SPRITESHEET const &> const &spritesheets)
+      : my_spritesheets(spritesheets)
+      , my_active_spritesheet(nullptr) // No animation is active by default!
       , my_fps(DEFAULT_FPS)
       , my_frame_counter(0)
       , my_current_frame(0)
       , should_render_outline(false)
-      , my_frame_rect(Rectangle{0,
-                                0,
-                                static_cast<float>(spritesheet.width),
-                                static_cast<float>(static_cast<float>(spritesheet.height) /
-                                                   frame_count)}) // This assumes a vertically stacked spritesheet
+      , my_frame_rect(Rectangle{0, 0, 0, 0})
   {
   }
 
@@ -109,6 +121,22 @@ public:
    */
   void enableOutline(bool t);
   void setFPS(uint32_t t);
+
+  /**
+   * @brief Changes the active spritesheet
+   * @param key The key of the desired spritesheet
+   * @returns True if set animation successfully, False otherwise
+   */
+  bool setSpritesheet(std::string key);
+
+  /**
+   * @brief Changes the dimensions of the frame rect
+   * @param width The new width
+   * @param height The new height
+   *
+   * This should be used when changing spritesheets!
+   */
+  void setFrameDimensions(float width, float height);
 
   /**
    * @brief Advances the animation and renders the animated spritesheet

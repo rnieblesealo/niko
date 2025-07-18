@@ -12,6 +12,7 @@ void NIKO::startJump()
   this->is_grounded   = false;
 
   PlaySound(sfx_jump);
+  my_spritesheet_renderer->setSpritesheet("jump");
 }
 
 void NIKO::setPosition(int32_t x, int32_t y)
@@ -27,6 +28,7 @@ void NIKO::endJump()
   this->is_grounded   = true;
 
   PlaySound(sfx_land);
+  my_spritesheet_renderer->setSpritesheet("run");
 }
 
 void NIKO::update()
@@ -54,13 +56,15 @@ void NIKO::render()
 {
   const float my_sprite_scale = 4;
 
-  const float my_frame_width = my_sprite_scale * this->my_spritesheet_renderer->getFrameWidth();
-  const float my_height      = my_sprite_scale * this->my_spritesheet_renderer->getFrameHeight();
+  const float my_frame_width  = my_sprite_scale * this->my_spritesheet_renderer->getFrameWidth();
+  const float my_frame_height = my_sprite_scale * this->my_spritesheet_renderer->getFrameHeight();
 
   // We consider Niko's position to be at the center of his sprite
   // This draw dest position calculation accounts for that
-  Rectangle my_draw_dest = {
-      this->my_position.x - my_frame_width / 2, this->my_position.y - my_height / 2, my_frame_width, my_height};
+  Rectangle my_draw_dest = {this->my_position.x - my_frame_width / 2,
+                            this->my_position.y - my_frame_height / 2,
+                            my_frame_width,
+                            my_frame_height};
 
   this->my_spritesheet_renderer->render(my_draw_dest);
 

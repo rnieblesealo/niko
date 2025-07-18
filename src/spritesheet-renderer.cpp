@@ -11,13 +11,13 @@ void SPRITESHEET_RENDERER::advanceFrames()
 
     this->my_current_frame++;
 
-    if (this->my_current_frame == this->my_frame_count)
+    if (this->my_current_frame == this->my_active_spritesheet->frame_count)
     {
       this->my_current_frame = 0;
     }
 
-    this->my_frame_rect.y = static_cast<float>(this->my_current_frame *
-                                               static_cast<float>(this->my_spritesheet.height) / this->my_frame_count);
+    this->my_frame_rect.y =
+        static_cast<float>(this->my_current_frame * this->getFrameHeight());
   }
 }
 
@@ -38,7 +38,7 @@ void SPRITESHEET_RENDERER::render(Rectangle &dest)
     this->renderOutline(dest);
   }
 
-  DrawTexturePro(this->my_spritesheet,
+  DrawTexturePro(this->my_active_spritesheet->spritesheet,
                  this->my_frame_rect,
                  dest,
                  Vector2{0, 0}, // No origin offset
@@ -60,11 +60,47 @@ void SPRITESHEET_RENDERER::renderOutline(Rectangle &dest)
     Rectangle dest_outline = {
         dest.x + outline_thickness_width * dir.x, dest.y + outline_thickness_width * dir.y, dest.width, dest.height};
 
-    DrawTexturePro(this->my_spritesheet,
+    DrawTexturePro(this->my_active_spritesheet->spritesheet,
                    this->my_frame_rect,
                    dest_outline,
                    Vector2{0, 0}, // No origin offset
                    0,             // No rotation
-                   BLACK);        // Fully black, NOTE: Can make into option!
+                   BLACK);        // Fully black  TODO: Make into option?
   }
+}
+
+bool SPRITESHEET_RENDERER::setSpritesheet(std::string key)
+{
+  if (!this->my_spritesheets.count(key))
+  {
+    return false;
+  }
+
+  this->my_active_spritesheet = &this->my_spritesheets.at(key);
+
+  /**
+   * @note We assume a vertically stacked spritesheet, always!
+   */
+  this->setFrameDimensions(static_cast<float>(this->my_active_spritesheet->spritesheet.width),
+                           static_cast<float>(static_cast<float>(this->my_active_spritesheet->spritesheet.height) /
+                                              this->my_active_spritesheet->frame_count)
+
+  );
+
+  this->resetFrames();
+
+  return true;
+}
+
+void SPRITESHEET_RENDERER::setFrameDimensions(float width, float height)
+{
+  this->my_frame_rect.width  = width;
+  this->my_frame_rect.height = height;
+}
+
+void SPRITESHEET_RENDERER::resetFrames()
+{
+  this->my_frame_counter = 0;
+  this->my_current_frame = 0;
+  this->my_frame_rect.y  = 0;
 }

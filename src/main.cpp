@@ -74,16 +74,23 @@ int main(void)
       {-16, 127},
   };
 
-  /* === Niko === */
+  // Load spritesheet textures
+  Texture2D spr_niko_run  = LoadTexture(std::filesystem::path("assets/niko-run.png").c_str());
+  Texture2D spr_niko_jump = LoadTexture(std::filesystem::path("assets/niko-jump.png").c_str());
 
-  Texture2D spr_niko = LoadTexture(std::filesystem::path("assets/niko.png").c_str());
+  // Organize them
+  std::map<std::string, SPRITESHEET const &> const &niko_spritesheets{{"run", SPRITESHEET{spr_niko_run, 8}},
+                                                                      {"jump", SPRITESHEET{spr_niko_jump, 1}}};
 
-  std::shared_ptr<SPRITESHEET_RENDERER> niko_spritesheet_renderer(new SPRITESHEET_RENDERER(spr_niko, 8));
+  // Create renderer with them
+  std::shared_ptr<SPRITESHEET_RENDERER> niko_spritesheet_renderer(new SPRITESHEET_RENDERER(niko_spritesheets));
 
+  // Apply our settings
   niko_spritesheet_renderer->setFPS(4);
   niko_spritesheet_renderer->enableOutline(true);
+  niko_spritesheet_renderer->setSpritesheet("run");
 
-  // Niko niko(niko_spritesheet_renderer);
+  // Instantiate niko himself
   NIKO niko(niko_spritesheet_renderer);
 
   niko.setPosition(100, FLOOR_Y_POS);
@@ -267,7 +274,9 @@ int main(void)
     EndDrawing();
   }
 
-  UnloadTexture(spr_niko); // TODO: Take care of these...
+  UnloadTexture(spr_niko_run); // TODO: Take care of these...
+  UnloadTexture(spr_niko_jump);
+
   CloseWindow();
 
   return 0;
