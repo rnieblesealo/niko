@@ -1,4 +1,5 @@
 #include "constants.h"
+#include "niko.h"
 #include "spritesheet-renderer.h"
 #include <algorithm>
 #include <array>
@@ -9,94 +10,37 @@
 
 using namespace COLORPAL_12J4NK;
 
-class Niko
+namespace
 {
-private:
-  std::shared_ptr<SPRITESHEET_RENDERER> my_spritesheet_renderer;
+// TODO: Move this
+static Font IMPACT_FONT = LoadFont("assets/impact.ttf");
 
-  Vector2  position      = {100, 100};
-  Vector2  velocity      = {0, 0};
-  bool     is_grounded   = false;
-  float    jump_velocity = 0;
-  uint32_t jump_timer    = 0;
+const uint32_t IMPACT_FONT_size    = 32;
+const uint32_t IMPACT_FONT_spacing = 2;
+} // namespace
 
-  const Sound sfx_jump = LoadSound(std::filesystem::path("assets/jump.wav").c_str());
-  const Sound sfx_land = LoadSound(std::filesystem::path("assets/land.wav").c_str());
+void drawTitle()
+{
+  // Draw the title
+  const std::string title_text = "Niko The\n\tNicotine-Addicted\n\t\tPunk Salamander";
 
-  void startJump()
-  {
-    this->jump_velocity = -JUMP_FORCE;
-    this->is_grounded   = false;
+  Vector2 title_bounds = MeasureTextEx(IMPACT_FONT, title_text.c_str(), IMPACT_FONT_size, IMPACT_FONT_spacing);
 
-    PlaySound(sfx_jump);
-  }
+  const float title_y_offset_from_center =
+      -90; // To move the title up, down from its default position at center of scren
 
-  void endJump()
-  {
-    this->jump_velocity = 0;
-    this->position.y    = FLOOR_Y_POS - 35;
-    this->is_grounded   = true;
+  /**
+   * @note This semantically sucks but it works
+   *
+   * (Yes, it's the screen dest rect where title text is drawn)
+   */
+  Rectangle title_dest_rect = {SCREEN_WIDTH / 2.0F - title_bounds.x / 2,
+                               SCREEN_HEIGHT / 2.0F - title_bounds.y / 2 + title_y_offset_from_center,
+                               title_bounds.x,
+                               title_bounds.y};
+}
 
-    PlaySound(sfx_land);
-  }
-
-  void updateJump()
-  {
-    position.y += this->jump_velocity;
-    float feet_pos = this->position.y + 35;
-
-    if (!is_grounded)
-    {
-      this->jump_velocity -= GRAVITY;
-
-      if (feet_pos + 2.0f > FLOOR_Y_POS)
-      {
-        this->jump_velocity = 2;
-      }
-
-      if (feet_pos >= FLOOR_Y_POS)
-      {
-        endJump();
-      }
-    }
-  };
-
-public:
-  Niko(std::shared_ptr<SPRITESHEET_RENDERER> spritesheet_renderer)
-      : my_spritesheet_renderer(spritesheet_renderer)
-  {
-  }
-
-  void move()
-  {
-    if (IsKeyDown(KEY_SPACE))
-    {
-      if (this->is_grounded)
-      {
-        startJump();
-      }
-    }
-
-    updateJump();
-  }
-
-  void render()
-  {
-    const float my_sprite_scale = 4;
-
-    const float my_frame_width = my_sprite_scale * this->my_spritesheet_renderer->getFrameWidth();
-    const float my_height      = my_sprite_scale * this->my_spritesheet_renderer->getFrameHeight();
-
-    // We consider Niko's position to be at the center of his sprite
-    // This draw dest position calculation accounts for that
-    Rectangle my_draw_dest = {position.x - my_frame_width / 2, position.y - my_height / 2, my_frame_width, my_height};
-
-    this->my_spritesheet_renderer->render(my_draw_dest);
-
-    // Draw a point at Niko's position to visualize it!
-    DrawCircleV(this->position, 5, PINK);
-  }
-};
+void drawTitleOutline() {}
 
 int main(void)
 {
@@ -107,10 +51,10 @@ int main(void)
 
   /* === Cool Font === */
 
-  Font impact_font = LoadFont("assets/impact.ttf");
+  Font IMPACT_FONT = LoadFont("assets/impact.ttf");
 
-  const uint32_t impact_font_size    = 32;
-  const uint32_t impact_font_spacing = 2;
+  const uint32_t IMPACT_FONT_size    = 32;
+  const uint32_t IMPACT_FONT_spacing = 2;
 
   /* === Scene === */
 
@@ -139,7 +83,10 @@ int main(void)
   niko_spritesheet_renderer->setFPS(4);
   niko_spritesheet_renderer->enableOutline(true);
 
-  Niko niko(niko_spritesheet_renderer);
+  // Niko niko(niko_spritesheet_renderer);
+  NIKO niko(niko_spritesheet_renderer);
+
+  niko.setPosition(100, FLOOR_Y_POS);
 
   /* === Obstacles === */
 
@@ -179,7 +126,14 @@ int main(void)
     // Game Logic
     // ===================================
 
-    niko.move();
+    if (IsKeyDown(KEY_SPACE))
+    {
+      niko.startJump();
+    }
+
+    // WARN: RESUME AT SETPOS GETTER
+
+    niko.update();
 
     // Move the floor to create moving effect
     const float speed = 7;
@@ -273,7 +227,7 @@ int main(void)
     // Draw the title
     const std::string title_text = "Niko The\n\tNicotine-Addicted\n\t\tPunk Salamander";
 
-    Vector2 title_bounds = MeasureTextEx(impact_font, title_text.c_str(), impact_font_size, impact_font_spacing);
+    Vector2 title_bounds = MeasureTextEx(IMPACT_FONT, title_text.c_str(), IMPACT_FONT_size, IMPACT_FONT_spacing);
 
     const float title_y_offset_from_center =
         -90; // To move the title up, down from its default position at center of scren
@@ -292,20 +246,20 @@ int main(void)
     const int outline_thickness_width = 2;
     for (const auto &dir : DIRECTIONS)
     {
-      DrawTextEx(impact_font,
+      DrawTextEx(IMPACT_FONT,
                  title_text.c_str(),
                  Vector2{title_dest_rect.x + outline_thickness_width * dir.x,
                          title_dest_rect.y + outline_thickness_width * dir.y},
-                 impact_font_size,
-                 impact_font_spacing,
+                 IMPACT_FONT_size,
+                 IMPACT_FONT_spacing,
                  BLACK);
     }
 
-    DrawTextEx(impact_font,
+    DrawTextEx(IMPACT_FONT,
                title_text.c_str(),
                Vector2{title_dest_rect.x, title_dest_rect.y},
-               impact_font_size,
-               impact_font_spacing,
+               IMPACT_FONT_size,
+               IMPACT_FONT_spacing,
                WHITE);
 
     niko.render();
