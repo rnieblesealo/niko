@@ -1,4 +1,5 @@
 #include "constants.h"
+#include "gui.h"
 #include "niko.h"
 #include "spritesheet-renderer.h"
 #include <algorithm>
@@ -9,38 +10,6 @@
 #include <raylib.h>
 
 using namespace COLORPAL_12J4NK;
-
-namespace
-{
-// TODO: Move this
-static Font IMPACT_FONT = LoadFont("assets/impact.ttf");
-
-const uint32_t IMPACT_FONT_size    = 32;
-const uint32_t IMPACT_FONT_spacing = 2;
-} // namespace
-
-void drawTitle()
-{
-  // Draw the title
-  const std::string title_text = "Niko The\n\tNicotine-Addicted\n\t\tPunk Salamander";
-
-  Vector2 title_bounds = MeasureTextEx(IMPACT_FONT, title_text.c_str(), IMPACT_FONT_size, IMPACT_FONT_spacing);
-
-  const float title_y_offset_from_center =
-      -90; // To move the title up, down from its default position at center of scren
-
-  /**
-   * @note This semantically sucks but it works
-   *
-   * (Yes, it's the screen dest rect where title text is drawn)
-   */
-  Rectangle title_dest_rect = {SCREEN_WIDTH / 2.0F - title_bounds.x / 2,
-                               SCREEN_HEIGHT / 2.0F - title_bounds.y / 2 + title_y_offset_from_center,
-                               title_bounds.x,
-                               title_bounds.y};
-}
-
-void drawTitleOutline() {}
 
 int main(void)
 {
@@ -231,43 +200,7 @@ int main(void)
                     WHITE);
     }
 
-    // Draw the title
-    const std::string title_text = "Niko The\n\tNicotine-Addicted\n\t\tPunk Salamander";
-
-    Vector2 title_bounds = MeasureTextEx(IMPACT_FONT, title_text.c_str(), IMPACT_FONT_size, IMPACT_FONT_spacing);
-
-    const float title_y_offset_from_center =
-        -90; // To move the title up, down from its default position at center of scren
-
-    /**
-     * @note This semantically sucks but it works
-     *
-     * (Yes, it's the screen dest rect where title text is drawn)
-     */
-    Rectangle title_dest_rect = {SCREEN_WIDTH / 2.0F - title_bounds.x / 2,
-                                 SCREEN_HEIGHT / 2.0F - title_bounds.y / 2 + title_y_offset_from_center,
-                                 title_bounds.x,
-                                 title_bounds.y};
-
-    // Draw outline around title
-    const int outline_thickness_width = 2;
-    for (const auto &dir : DIRECTIONS)
-    {
-      DrawTextEx(IMPACT_FONT,
-                 title_text.c_str(),
-                 Vector2{title_dest_rect.x + outline_thickness_width * dir.x,
-                         title_dest_rect.y + outline_thickness_width * dir.y},
-                 IMPACT_FONT_size,
-                 IMPACT_FONT_spacing,
-                 BLACK);
-    }
-
-    DrawTextEx(IMPACT_FONT,
-               title_text.c_str(),
-               Vector2{title_dest_rect.x, title_dest_rect.y},
-               IMPACT_FONT_size,
-               IMPACT_FONT_spacing,
-               WHITE);
+    GUI::drawTitle("Niko The\n\tNicotine-Addicted\n\t\tPunk Salamander", IMPACT_FONT, 32, 2, -90, true);
 
     niko.render();
 

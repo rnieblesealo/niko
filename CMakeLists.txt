@@ -12,6 +12,7 @@ add_executable(${PROJECT_NAME}
   src/main.cpp
   src/spritesheet-renderer.cpp
   src/niko.cpp
+  src/gui.cpp
 )
 
 if(APPLE)

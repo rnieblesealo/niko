@@ -69,5 +69,5 @@ void NIKO::render()
   this->my_spritesheet_renderer->render(my_draw_dest);
 
   // Draw a point at Niko's position to visualize it!
-  DrawCircleV(this->my_position, 5, PINK);
+  // DrawCircleV(this->my_position, 5, PINK);
 }
