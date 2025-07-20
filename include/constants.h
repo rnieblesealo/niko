@@ -21,7 +21,7 @@ const uint32_t SCREEN_HEIGHT = 400;
 /**
  * @brief Window FPS limit
  */
-const uint32_t TARGET_FPS = 30;
+const uint32_t TARGET_FPS = 60;
 
 /**
  * @brief Identity directions

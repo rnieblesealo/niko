@@ -41,8 +41,6 @@ int main(void)
       {-16, 127},
   };
 
-  SCENE scene(sand);
-
   // === Niko ===
 
   // Load spritesheet textures
@@ -56,7 +54,7 @@ int main(void)
   std::shared_ptr<SPRITESHEET_RENDERER> niko_spritesheet_renderer(new SPRITESHEET_RENDERER(niko_spritesheets));
 
   // Apply our settings
-  niko_spritesheet_renderer->setFPS(4);
+  niko_spritesheet_renderer->setFPS(8);
   niko_spritesheet_renderer->enableOutline(true);
   niko_spritesheet_renderer->setSpritesheet("run");
 
