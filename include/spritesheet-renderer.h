@@ -101,13 +101,6 @@ public:
   {
   }
 
-  SPRITESHEET_RENDERER()                                        = delete;  // No default
-  SPRITESHEET_RENDERER(const SPRITESHEET_RENDERER &)            = delete;  // No copy
-  SPRITESHEET_RENDERER &operator=(const SPRITESHEET_RENDERER &) = delete;  // No copy assignment
-  SPRITESHEET_RENDERER(SPRITESHEET_RENDERER &&)                 = delete;  // No move
-  SPRITESHEET_RENDERER &operator=(SPRITESHEET_RENDERER &&)      = delete;  // No move assignment
-  ~SPRITESHEET_RENDERER()                                       = default; // Default destruct
-
   /**
    * @brief Getters
    * @returns Unscaled width and height of a frame
