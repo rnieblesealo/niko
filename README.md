@@ -63,3 +63,5 @@ Pipeline:
 - An `updateProps` func will displace them to the end of the screen and destroy them if they go off bounds
 
 Basically, floor props will work almost exactly like I'm thinking obstacles should, except you can't collide with them :)
+
+- References are not assignable, so the floor prop textures array must use `std::reference_wrapper`
