@@ -3,9 +3,14 @@
 
 #include "raylib.h"
 #include <cstdint>
+#include <string>
 
 namespace
 {
+/**
+ * @brief The window title
+ */
+const std::string WINDOW_TITLE = "Niko";
 
 /**
  * @brief Window dimensions

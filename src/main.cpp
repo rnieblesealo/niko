@@ -1,6 +1,7 @@
 #include "constants.h"
 #include "gui.h"
 #include "niko.h"
+#include "scene.h"
 #include "spritesheet-renderer.h"
 #include <algorithm>
 #include <array>
@@ -13,17 +14,14 @@ using namespace COLORPAL_12J4NK;
 
 int main(void)
 {
-  InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Niko");
+  InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE.c_str());
   InitAudioDevice();
 
-  SetTargetFPS(60);
+  SetTargetFPS(TARGET_FPS);
 
-  /* === Cool Font === */
+  /* === Fonts === */
 
   Font IMPACT_FONT = LoadFont("assets/impact.ttf");
-
-  const uint32_t IMPACT_FONT_size    = 32;
-  const uint32_t IMPACT_FONT_spacing = 2;
 
   /* === Scene === */
 
@@ -43,6 +41,10 @@ int main(void)
       {-16, 127},
   };
 
+  SCENE scene(sand);
+
+  // === Niko ===
+
   // Load spritesheet textures
   Texture2D spr_niko_run  = LoadTexture(std::filesystem::path("assets/niko-run.png").c_str());
   Texture2D spr_niko_jump = LoadTexture(std::filesystem::path("assets/niko-jump.png").c_str());
@@ -50,7 +52,6 @@ int main(void)
   // Organize them
   std::map<std::string, SPRITESHEET const &> const &niko_spritesheets{{"run", SPRITESHEET{spr_niko_run, 8}},
                                                                       {"jump", SPRITESHEET{spr_niko_jump, 1}}};
-
   // Create renderer with them
   std::shared_ptr<SPRITESHEET_RENDERER> niko_spritesheet_renderer(new SPRITESHEET_RENDERER(niko_spritesheets));
 
@@ -59,7 +60,7 @@ int main(void)
   niko_spritesheet_renderer->enableOutline(true);
   niko_spritesheet_renderer->setSpritesheet("run");
 
-  // Instantiate niko himself
+  // Instantiate Niko himself
   NIKO niko(niko_spritesheet_renderer);
 
   niko.setPosition(100, FLOOR_Y_POS);
