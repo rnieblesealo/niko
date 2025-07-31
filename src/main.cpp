@@ -21,6 +21,7 @@ int main(void)
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE.c_str());
   InitAudioDevice();
   SetTargetFPS(TARGET_FPS);
+  SetTraceLogLevel(LOG_ALL);
 
   // =========================================================================================
   // SETUP
@@ -98,8 +99,6 @@ int main(void)
   float                       spawn_chance = 0.75;
   std::bernoulli_distribution flip_coin(spawn_chance);
 
-  SetTraceLogLevel(LOG_ALL);
-
   // ======================================================================================
   // MAIN GAME LOOP
   // ======================================================================================
@@ -164,7 +163,7 @@ int main(void)
                     obstacles.end());
 
     // =====================================================================================
-    // RENDERING 
+    // RENDERING
     // =====================================================================================
 
     BeginDrawing();
@@ -201,7 +200,8 @@ int main(void)
     EndDrawing();
   }
 
-  UnloadTexture(spr_niko_run); // TODO: Take care of these... You aren't freeing everything
+  UnloadTexture(
+      spr_niko_run); // TODO: Take care of these... You aren't freeing everything
   UnloadTexture(spr_niko_jump);
 
   CloseWindow();

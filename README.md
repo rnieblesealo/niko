@@ -71,3 +71,9 @@ Basically, floor props will work almost exactly like I'm thinking obstacles shou
 When adding floors, the initializer currently adds 2 with the correct consistent dimensions
 The floor moving logic assumes they are all the same width
 If we ever change the initializer's logic to allow multiple floor textures, this will be an issue!
+
+### Obstacles + Scene
+
+The scene shouldn't be in control of spawning obstacles; it's simply where they'll be placed
+
+There should be a dedicated singleton "game manager" that handles things like collision and such
