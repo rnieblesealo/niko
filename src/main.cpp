@@ -74,13 +74,13 @@ int main(void)
   // OBSTACLES SETUP
   // =====================================================================================
 
-  const std::array<Texture2D, 3> obs_short = {
+  const std::array<Texture2D, 3> obstacle_textures = {
       LoadTexture(std::filesystem::path("assets/tate.png").c_str()),
       LoadTexture(std::filesystem::path("assets/trump.png").c_str()),
       LoadTexture(std::filesystem::path("assets/netanyahu.png").c_str()),
   };
 
-  std::vector<std::pair<uint32_t, Rectangle>> obstacles{};
+  std::vector<std::pair<uint32_t, Rectangle>> obstacle_objects{};
 
   const uint32_t obs_small_width      = 60;
   const uint32_t obs_small_height     = 60;
@@ -93,7 +93,7 @@ int main(void)
 
   // Create distribution of ints
   std::uniform_int_distribution<std::size_t> spawnDistr(
-      0, obs_short.size() - 1); // Careful! This is inclusive
+      0, obstacle_textures.size() - 1); // Careful! This is inclusive
 
   // Create Bernoulli (True or False) distribution with spawn chance
   float                       spawn_chance = 0.75;
@@ -123,7 +123,7 @@ int main(void)
     niko.update();
     scene.update();
 
-    // Spawn obstacles
+    // Spawn obstacle_objects
     obstacle_spawn_timer++;
 
     if (obstacle_spawn_timer >= (TARGET_FPS / obstacle_spawn_rate))
@@ -138,29 +138,29 @@ int main(void)
                                                  obs_small_width,
                                                  obs_small_height};
 
-        obstacles.push_back({obstacle_texture, obstacle_draw_rect});
+        obstacle_objects.push_back({obstacle_texture, obstacle_draw_rect});
       }
 
       obstacle_spawn_timer = 0;
     }
 
-    // Move obstacles
-    for (auto &obstacle : obstacles)
+    // Move obstacle_objects
+    for (auto &obstacle : obstacle_objects)
     {
       Rectangle &draw_dest = obstacle.second;
       draw_dest.x -= GAME_SPEED;
     }
 
-    // Delete offscreen obstacles
+    // Delete offscreen obstacle_objects
     // NOTE: Lambda function in C++! Neat; the [&] specifies we capture args by reference
-    obstacles.erase(std::remove_if(obstacles.begin(),
-                                   obstacles.end(),
-                                   [&](const auto &obstacle)
-                                   {
-                                     const Rectangle &draw_dest = obstacle.second;
-                                     return draw_dest.x < -draw_dest.width;
-                                   }),
-                    obstacles.end());
+    obstacle_objects.erase(std::remove_if(obstacle_objects.begin(),
+                                          obstacle_objects.end(),
+                                          [&](const auto &obstacle)
+                                          {
+                                            const Rectangle &draw_dest = obstacle.second;
+                                            return draw_dest.x < -draw_dest.width;
+                                          }),
+                           obstacle_objects.end());
 
     // =====================================================================================
     // RENDERING
@@ -169,16 +169,17 @@ int main(void)
     BeginDrawing();
     ClearBackground(NK_BLUE);
 
-    // Draw the obstacles
-    for (const auto &obstacle : obstacles)
+    // Draw the obstacle_objects
+    for (const auto &obstacle : obstacle_objects)
     {
       const int       &texture_index = obstacle.first;
       const Rectangle &draw_dest     = obstacle.second;
 
-      DrawTextureEx(obs_short[texture_index],
+      DrawTextureEx(obstacle_textures[texture_index],
                     {draw_dest.x, draw_dest.y},
                     0,
-                    static_cast<float>(obs_small_width) / obs_short[texture_index].width,
+                    static_cast<float>(obs_small_width) /
+                        obstacle_textures[texture_index].width,
                     WHITE);
     }
 

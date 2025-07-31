@@ -2,6 +2,7 @@
 #define GAME_MANAGER_H
 
 #include <random>
+#include <raylib.h>
 
 class GAME_MANAGER final
 {
@@ -17,6 +18,11 @@ private:
   std::mt19937 rng;
 
   /**
+   * @brief Obstacle textures
+   */
+  std::vector<Texture2D> const &my_obstacle_textures;
+
+  /**
    * @brief Distribution of obstacle texture indices
    * Sampled randomly to choose a texture for the next obstacle
    */
@@ -29,7 +35,7 @@ private:
   std::bernoulli_distribution coin_flip;
 
 public:
-  explicit GAME_MANAGER();
+  explicit GAME_MANAGER(std::vector<Texture2D> const &obstacle_textures);
 
   void update();
 };
