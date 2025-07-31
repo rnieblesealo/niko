@@ -65,3 +65,9 @@ Pipeline:
 Basically, floor props will work almost exactly like I'm thinking obstacles should, except you can't collide with them :)
 
 - References are not assignable, so the floor prop textures array must use `std::reference_wrapper`
+
+---
+
+When adding floors, the initializer currently adds 2 with the correct consistent dimensions
+The floor moving logic assumes they are all the same width
+If we ever change the initializer's logic to allow multiple floor textures, this will be an issue!

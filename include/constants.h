@@ -24,6 +24,11 @@ const uint32_t SCREEN_HEIGHT = 400;
 const uint32_t TARGET_FPS = 60;
 
 /**
+ * @brief The velocity of things moving in the game
+ */
+const uint32_t GAME_SPEED = 7;
+
+/**
  * @brief Identity directions
  */
 const Vector2 DIRECTIONS[4]{{0, -1}, // Up

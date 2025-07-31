@@ -14,11 +14,13 @@ private:
   const Texture2D &my_floor_texture;
 
   /**
-   * @brief Floor dest rects
-   * To create a "moving" floor we use 2 floors that change pos offscreen
+   * @brief Floor X positions
+   * To create a "moving" floor we draw 2 floors at different X pos
+   * All of them are always drawn at same Y pos
+   *
+   * WARNING: This assumes that all floors will have dimensions of given texture!
    */
-  Rectangle my_floor_a;
-  Rectangle my_floor_b;
+  std::array<float, 2> my_floors;
 
   /**
    * @brief Stores textures of floor props
@@ -47,10 +49,13 @@ public:
   /**
    * @brief Draws a static prop
    */
-  void drawStaticProp(Texture2D &static_prop_texture, Vector2 pos, uint32_t scale);
+  void drawStaticProp(Texture2D const &static_prop_texture,
+                      Vector2          pos,
+                      uint32_t         scale   = 1,
+                      float            opacity = 1);
 
   void update() override;
-  void draw() override;
+  void render() override;
 };
 
 #endif

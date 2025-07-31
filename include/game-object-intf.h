@@ -18,7 +18,7 @@ public:
    * @brief Draws this object to the screen
    * The parameters we use to do so might vary (Will we use a dest rect? Position? etc...)
    */
-  virtual void draw() = 0;
+  virtual void render() = 0;
 
   /**
    * @brief Updates this object's state
