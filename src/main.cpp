@@ -80,25 +80,6 @@ int main(void)
       LoadTexture(std::filesystem::path("assets/netanyahu.png").c_str()),
   };
 
-  std::vector<std::pair<uint32_t, Rectangle>> obstacle_objects{};
-
-  const uint32_t obs_small_width      = 60;
-  const uint32_t obs_small_height     = 60;
-  const uint32_t obstacle_spawn_rate  = 1; // Obstacles per second
-  uint32_t       obstacle_spawn_timer = 0;
-
-  // Init RNG engine seeded with time
-  std::mt19937 rngEngine(
-      static_cast<uint32_t>(std::chrono::system_clock::now().time_since_epoch().count()));
-
-  // Create distribution of ints
-  std::uniform_int_distribution<std::size_t> spawnDistr(
-      0, obstacle_textures.size() - 1); // Careful! This is inclusive
-
-  // Create Bernoulli (True or False) distribution with spawn chance
-  float                       spawn_chance = 0.75;
-  std::bernoulli_distribution flip_coin(spawn_chance);
-
   GAME_MANAGER gameman(obstacle_textures);
 
   // ======================================================================================
