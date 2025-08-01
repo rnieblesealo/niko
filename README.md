@@ -74,6 +74,8 @@ If we ever change the initializer's logic to allow multiple floor textures, this
 
 ### Obstacles + Scene
 
-The scene shouldn't be in control of spawning obstacles; it's simply where they'll be placed
-
-There should be a dedicated singleton "game manager" that handles things like collision and such
+- The scene shouldn't be in control of spawning obstacles; it's simply where they'll be placed
+- There should be a dedicated singleton "game manager" that handles things like collision and such
+- Obstacle textures will be a vector now but it will be private so we cant add to it after its committed!
+- The reason it's a vector is that we must specialize size of `std::array` in member
+> i.e. If we wanted to add more obstacle texts. in the `main.cpp`, we'd need to update the array length in 2 places. Better to have an editable vector!

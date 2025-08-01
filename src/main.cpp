@@ -1,10 +1,10 @@
 #include "constants.h"
+#include "game-manager.h"
 #include "gui.h"
 #include "niko.h"
 #include "scene.h"
 #include "spritesheet-renderer.h"
 #include <algorithm>
-#include <array>
 #include <cstdint>
 #include <filesystem>
 #include <random>
@@ -74,7 +74,7 @@ int main(void)
   // OBSTACLES SETUP
   // =====================================================================================
 
-  const std::array<Texture2D, 3> obstacle_textures = {
+  const std::vector<Texture2D> obstacle_textures = {
       LoadTexture(std::filesystem::path("assets/tate.png").c_str()),
       LoadTexture(std::filesystem::path("assets/trump.png").c_str()),
       LoadTexture(std::filesystem::path("assets/netanyahu.png").c_str()),
@@ -99,6 +99,8 @@ int main(void)
   float                       spawn_chance = 0.75;
   std::bernoulli_distribution flip_coin(spawn_chance);
 
+  GAME_MANAGER gameman(obstacle_textures);
+
   // ======================================================================================
   // MAIN GAME LOOP
   // ======================================================================================
@@ -122,45 +124,7 @@ int main(void)
 
     niko.update();
     scene.update();
-
-    // Spawn obstacle_objects
-    obstacle_spawn_timer++;
-
-    if (obstacle_spawn_timer >= (TARGET_FPS / obstacle_spawn_rate))
-    {
-      // Flip a coin; there is an x chance we will spawn
-      bool should_spawn = flip_coin(rngEngine);
-      if (should_spawn)
-      {
-        int       obstacle_texture   = static_cast<int>(spawnDistr(rngEngine));
-        Rectangle obstacle_draw_rect = Rectangle{SCREEN_WIDTH + obs_small_width,
-                                                 FLOOR_Y_POS - obs_small_height,
-                                                 obs_small_width,
-                                                 obs_small_height};
-
-        obstacle_objects.push_back({obstacle_texture, obstacle_draw_rect});
-      }
-
-      obstacle_spawn_timer = 0;
-    }
-
-    // Move obstacle_objects
-    for (auto &obstacle : obstacle_objects)
-    {
-      Rectangle &draw_dest = obstacle.second;
-      draw_dest.x -= GAME_SPEED;
-    }
-
-    // Delete offscreen obstacle_objects
-    // NOTE: Lambda function in C++! Neat; the [&] specifies we capture args by reference
-    obstacle_objects.erase(std::remove_if(obstacle_objects.begin(),
-                                          obstacle_objects.end(),
-                                          [&](const auto &obstacle)
-                                          {
-                                            const Rectangle &draw_dest = obstacle.second;
-                                            return draw_dest.x < -draw_dest.width;
-                                          }),
-                           obstacle_objects.end());
+    gameman.updateObstacles();
 
     // =====================================================================================
     // RENDERING
@@ -169,19 +133,7 @@ int main(void)
     BeginDrawing();
     ClearBackground(NK_BLUE);
 
-    // Draw the obstacle_objects
-    for (const auto &obstacle : obstacle_objects)
-    {
-      const int       &texture_index = obstacle.first;
-      const Rectangle &draw_dest     = obstacle.second;
-
-      DrawTextureEx(obstacle_textures[texture_index],
-                    {draw_dest.x, draw_dest.y},
-                    0,
-                    static_cast<float>(obs_small_width) /
-                        obstacle_textures[texture_index].width,
-                    WHITE);
-    }
+    gameman.renderObstacles();
 
     GUI::drawTitle("Niko The\n\tNicotine-Addicted\n\t\tPunk Salamander",
                    IMPACT_FONT,

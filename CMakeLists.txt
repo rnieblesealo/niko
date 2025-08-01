@@ -14,6 +14,7 @@ add_executable(${PROJECT_NAME}
   src/niko.cpp
   src/gui.cpp
   src/scene.cpp
+  src/game-manager.cpp
 )
 
 if(APPLE)

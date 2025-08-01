@@ -13,6 +13,22 @@ private:
   const float HEADS_CHANCE = 0.75;
 
   /**
+   * @brief Dimensions of an obstacle
+   */
+  const Vector2 OBSTACLE_DIMENSIONS{60, 60};
+
+  /**
+   * @brief Interval of obstacle spawn
+   * (In spawns per second)
+   */
+  const uint32_t obstacle_spawn_rate = 1;
+
+  /**
+   * @brief Timer to next obstacle spawn
+   */
+  uint32_t obstacle_spawn_timer = 0;
+
+  /**
    * @brief Random number generator
    */
   std::mt19937 rng;
@@ -34,10 +50,33 @@ private:
    */
   std::bernoulli_distribution coin_flip;
 
+  /**
+   * @brief Onscreen obstacles
+   * .first = Index of obstacle texture
+   * .second = Dest rect of obstacle
+   */
+  std::vector<std::pair<uint32_t, Rectangle>> active_obstacles{};
+
+  /**
+   * @brief Advances obstacle spawn timer and spawns new obstacles according to set interval
+   */
+  void runObstacleSpawner();
+
+  /**
+   * @brief Moves active obstacles
+   */
+  void moveActiveObstacles();
+
+  /**
+   * @brief Deletes offscreen obstacles
+   */
+  void removeOffscreenObstacles();
+
 public:
   explicit GAME_MANAGER(std::vector<Texture2D> const &obstacle_textures);
 
-  void update();
+  void renderObstacles();
+  void updateObstacles();
 };
 
 #endif
