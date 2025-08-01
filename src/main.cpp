@@ -4,10 +4,7 @@
 #include "niko.h"
 #include "scene.h"
 #include "spritesheet-renderer.h"
-#include <algorithm>
-#include <cstdint>
 #include <filesystem>
-#include <random>
 #include <raylib.h>
 
 using namespace COLORPAL_12J4NK;
