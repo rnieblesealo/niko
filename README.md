@@ -79,3 +79,13 @@ If we ever change the initializer's logic to allow multiple floor textures, this
 - Obstacle textures will be a vector now but it will be private so we cant add to it after its committed!
 - The reason it's a vector is that we must specialize size of `std::array` in member
 > i.e. If we wanted to add more obstacle texts. in the `main.cpp`, we'd need to update the array length in 2 places. Better to have an editable vector!
+
+### Why Circle Collision?
+
+- Less difficult to adjust than collision rect
+> Sprite dest rect often has whitespace around it which is also accounted for in collision. We want a manually adjustable collision shape to amend this. A circle simply requires a point and a center, and we only need to store the radius!
+- Consider changing this for a struct!
+
+### Default Args
+
+As a coding standard thing, default args should always be in the .h

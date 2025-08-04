@@ -14,8 +14,6 @@ void GAME_MANAGER::runObstacleSpawner()
 {
   obstacle_spawn_timer++;
 
-  std::cout << (TARGET_FPS / obstacle_spawn_rate) << std::endl;
-
   if (obstacle_spawn_timer >= (TARGET_FPS / obstacle_spawn_rate))
   {
     // Flip coin to see if we will spawn obstacle this interval

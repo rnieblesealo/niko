@@ -27,7 +27,7 @@ int main(void)
   Font IMPACT_FONT = LoadFont("assets/impact.ttf");
 
   // ================================================================================
-  // (PLAYER SETUP )
+  // PLAYER SETUP
   // ================================================================================
 
   // Load spritesheet textures
@@ -113,12 +113,14 @@ int main(void)
 
     gameman.renderObstacles();
 
+    /*
     GUI::drawTitle("Niko The\n\tNicotine-Addicted\n\t\tPunk Salamander",
                    IMPACT_FONT,
                    32,
                    2,
                    -90,
                    true);
+    */
 
     // Draw some clouds; completely eyeballed!
     scene.drawStaticProp(cloud_texture, Vector2{130, 22}, 4, 0.3);
@@ -126,7 +128,7 @@ int main(void)
     scene.drawStaticProp(cloud_texture, Vector2{-16, 127}, 2, 0.1);
     scene.render();
 
-    niko.render();
+    niko.render(true);
 
     EndDrawing();
   }

@@ -54,11 +54,11 @@ void SPRITESHEET_RENDERER::renderOutline(Rectangle &dest)
    * We draw 4 black-tinted copies of the sprite offset by the same amount to top, bottom, left and right
    * This creates a poor man's stroke effect! :)
    */
-  const int outline_thickness_width = 4;
+  const int OUTLINE_THICKNESS_WIDTH = 4;
   for (const auto &dir : DIRECTIONS)
   {
     Rectangle dest_outline = {
-        dest.x + outline_thickness_width * dir.x, dest.y + outline_thickness_width * dir.y, dest.width, dest.height};
+        dest.x + OUTLINE_THICKNESS_WIDTH * dir.x, dest.y + OUTLINE_THICKNESS_WIDTH * dir.y, dest.width, dest.height};
 
     DrawTexturePro(this->my_active_spritesheet->spritesheet,
                    this->my_frame_rect,

@@ -17,6 +17,7 @@ private:
 
   Vector2  my_position;
   Vector2  my_velocity;
+  float    my_collision_radius;
   uint32_t my_jump_timer;
   bool     is_grounded;
 
@@ -26,6 +27,7 @@ public:
   NIKO(std::shared_ptr<SPRITESHEET_RENDERER> spritesheet_renderer)
       : my_position({Vector2{0, 0}})
       , my_velocity({Vector2{0, 0}})
+      , my_collision_radius(20)
       , my_jump_timer(0)
       , is_grounded(false)
       , sfx_jump(LoadSound(std::filesystem::path("assets/jump.wav").c_str()))
@@ -38,11 +40,12 @@ public:
   void startJump();
 
   // Getter/Setter
-  void setPosition(int32_t x, int32_t y);
+  void                      setPosition(int32_t x, int32_t y);
+  std::pair<Vector2, float> getCollisionCircle();
 
   // Update
   void update();
-  void render();
+  void render(bool debug_mode = false);
 };
 
 #endif

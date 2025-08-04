@@ -1,5 +1,6 @@
 #include "niko.h"
 #include "constants.h"
+#include "raylib.h"
 
 void NIKO::startJump()
 {
@@ -19,6 +20,14 @@ void NIKO::setPosition(int32_t x, int32_t y)
 {
   this->my_position.x = x;
   this->my_position.y = y;
+}
+
+std::pair<Vector2, float> NIKO::getCollisionCircle()
+{
+  const Vector2 collision_circle_pos = Vector2{this->my_position.x, this->my_position.y};
+  const float   collision_circle_radius = this->my_collision_radius;
+
+  return {collision_circle_pos, collision_circle_radius};
 }
 
 void NIKO::endJump()
@@ -52,12 +61,14 @@ void NIKO::update()
   }
 }
 
-void NIKO::render()
+void NIKO::render(bool debug_mode)
 {
-  const float my_sprite_scale = 4;
+  const float NIKO_SPRITE_SCALE = 4;
 
-  const float my_frame_width  = my_sprite_scale * this->my_spritesheet_renderer->getFrameWidth();
-  const float my_frame_height = my_sprite_scale * this->my_spritesheet_renderer->getFrameHeight();
+  const float my_frame_width =
+      NIKO_SPRITE_SCALE * this->my_spritesheet_renderer->getFrameWidth();
+  const float my_frame_height =
+      NIKO_SPRITE_SCALE * this->my_spritesheet_renderer->getFrameHeight();
 
   // We consider Niko's position to be at the center of his sprite
   // This draw dest position calculation accounts for that
@@ -68,6 +79,14 @@ void NIKO::render()
 
   this->my_spritesheet_renderer->render(my_draw_dest);
 
-  // Draw a point at Niko's position to visualize it!
-  // DrawCircleV(this->my_position, 5, PINK);
+  if (debug_mode)
+  {
+    // Draw collider
+    auto my_col_circ = this->getCollisionCircle();
+    DrawCircleLines(
+        my_col_circ.first.x, my_col_circ.first.y, my_col_circ.second, MAGENTA);
+
+    // Draw a point at Niko's position to visualize it!
+    DrawCircleV(this->my_position, 2, GREEN);
+  }
 }
