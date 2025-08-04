@@ -22,7 +22,7 @@ void NIKO::setPosition(int32_t x, int32_t y)
   this->my_position.y = y;
 }
 
-std::pair<Vector2, float> NIKO::getCollisionCircle()
+std::pair<Vector2, float> NIKO::getCollisionCircle() const
 {
   const Vector2 collision_circle_pos = Vector2{this->my_position.x, this->my_position.y};
   const float   collision_circle_radius = this->my_collision_radius;

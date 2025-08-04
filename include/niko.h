@@ -41,7 +41,7 @@ public:
 
   // Getter/Setter
   void                      setPosition(int32_t x, int32_t y);
-  std::pair<Vector2, float> getCollisionCircle();
+  std::pair<Vector2, float> getCollisionCircle() const;
 
   // Update
   void update();

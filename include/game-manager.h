@@ -2,7 +2,6 @@
 #define GAME_MANAGER_H
 
 #include "niko.h"
-#include <algorithm>
 #include <random>
 #include <raylib.h>
 
@@ -75,23 +74,10 @@ private:
   void removeOffscreenObstacles();
 
   /**
-   * @brief Checks if player is touching an obstacle
+   * @brief Tries to find an obstacle colliding with given player
+   * If a first obstacle is found, it returns true
    */
-  bool playerTouchingObstacle(const NIKO &niko)
-  {
-    active_obstacles.erase(std::find_if(
-        active_obstacles.begin(),
-        active_obstacles.end(),
-        // Conditional deletion function
-        // Any obstacle fully past the LEFT SIDE of screen ( x = 0 - obs.width ) is considered off bounds
-        [&](const auto &obstacle) -> bool
-        {
-          // const Rectangle &obstacle_rect = obstacle.second;
-          return true;
-        }));
-
-    return false;
-  }
+  bool nikoTouchingObstacle(NIKO const &niko);
 
 public:
   explicit GAME_MANAGER(std::vector<Texture2D> const &obstacle_textures);
