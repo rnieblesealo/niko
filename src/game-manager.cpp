@@ -1,6 +1,5 @@
 #include "game-manager.h"
 #include "constants.h"
-#include <iostream>
 
 GAME_MANAGER::GAME_MANAGER(std::vector<Texture2D> const &obstacle_textures)
     : my_obstacle_textures(obstacle_textures)
@@ -72,7 +71,7 @@ bool GAME_MANAGER::nikoTouchingObstacle(NIKO const &niko)
                    [&](const auto &obstacle) -> bool
                    {
                      return CheckCollisionCircleRec(
-                         player_collider.first, player_collider.second, obstacle.rect);
+                         player_collider.first, player_collider.second, obstacle.second);
                    });
 
   return first_collided_obstacle != active_obstacles.end();

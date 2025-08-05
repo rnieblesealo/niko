@@ -73,14 +73,14 @@ private:
    */
   void removeOffscreenObstacles();
 
+public:
+  explicit GAME_MANAGER(std::vector<Texture2D> const &obstacle_textures);
+
   /**
    * @brief Tries to find an obstacle colliding with given player
    * If a first obstacle is found, it returns true
    */
   bool nikoTouchingObstacle(NIKO const &niko);
-
-public:
-  explicit GAME_MANAGER(std::vector<Texture2D> const &obstacle_textures);
 
   void renderObstacles();
   void updateObstacles();

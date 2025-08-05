@@ -5,6 +5,7 @@
 #include "scene.h"
 #include "spritesheet-renderer.h"
 #include <filesystem>
+#include <iostream>
 #include <raylib.h>
 
 using namespace COLORPAL_12J4NK;
