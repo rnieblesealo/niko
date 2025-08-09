@@ -5,7 +5,6 @@
 #include "scene.h"
 #include "spritesheet-renderer.h"
 #include <filesystem>
-#include <iostream>
 #include <raylib.h>
 
 using namespace COLORPAL_12J4NK;
@@ -72,13 +71,14 @@ int main(void)
   // OBSTACLES SETUP
   // =====================================================================================
 
-  const std::vector<Texture2D> obstacle_textures = {
-      LoadTexture(std::filesystem::path("assets/tate.png").c_str()),
-      LoadTexture(std::filesystem::path("assets/trump.png").c_str()),
-      LoadTexture(std::filesystem::path("assets/netanyahu.png").c_str()),
+  const std::vector<std::shared_ptr<Texture2D>> obstacle_textures = {
+      std::make_shared<Texture2D>(
+          LoadTexture(std::filesystem::path("assets/tate.png").c_str())),
+      std::make_shared<Texture2D>(
+          LoadTexture(std::filesystem::path("assets/trump.png").c_str())),
+      std::make_shared<Texture2D>(
+          LoadTexture(std::filesystem::path("assets/netanyahu.png").c_str())),
   };
-
-  GAME_MANAGER gameman(obstacle_textures);
 
   // ======================================================================================
   // MAIN GAME LOOP
@@ -103,7 +103,10 @@ int main(void)
 
     niko.update();
     scene.update();
-    gameman.updateObstacles();
+
+    GAME_MANAGER::getInstance().removeOffscreenObstacles();
+    GAME_MANAGER::getInstance().moveActiveObstacles();
+    GAME_MANAGER::getInstance().runObstacleSpawner(obstacle_textures);
 
     // =====================================================================================
     // RENDERING
@@ -112,7 +115,7 @@ int main(void)
     BeginDrawing();
     ClearBackground(NK_BLUE);
 
-    gameman.renderObstacles();
+    GAME_MANAGER::getInstance().renderObstacles();
 
     /*
     GUI::drawTitle("Niko The\n\tNicotine-Addicted\n\t\tPunk Salamander",

@@ -89,3 +89,13 @@ If we ever change the initializer's logic to allow multiple floor textures, this
 ### Default Args
 
 As a coding standard thing, default args should always be in the .h
+
+### Game Manager Snafoo
+
+It makes sense to have the game manager be a singleton because the entire game should have a big puppet master controlling it all. We give him what he needs and he just does it.
+
+Since singletons shouldn't have constructors with params (not sure why yet) I had to move members it used to have (like the ref. to the texture pool it could grab from) to outside and pass them to functions instead.
+ 
+I also made a dedicated value object for obstacles that stores proper full texture references (not just an index) and the unique rect for that obstacle as members. This is more idiomatic and uncouples this from the texture pool array.
+
+This required, however, using shared pointers to manage the texture refs; using normal pointers is a bit shitty (we have to manage that mem. ourselves) and refs are unassignable since they're just an alias. The initial obstacle texture pool then stores all possible textures as shared pointers and we go from there!

@@ -41,7 +41,7 @@ void SCENE::update()
   // Move the 2 floors to create effect
   for (auto &floor_x_pos : my_floors)
   {
-    floor_x_pos -= GAME_SPEED;
+    floor_x_pos -= BASE_GAME_SPEED;
     if (floor_x_pos < -static_cast<float>(SCREEN_WIDTH))
     {
       floor_x_pos =

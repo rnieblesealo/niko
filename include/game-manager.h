@@ -2,12 +2,15 @@
 #define GAME_MANAGER_H
 
 #include "niko.h"
+#include "types.h"
 #include <random>
 #include <raylib.h>
 
 class GAME_MANAGER final
 {
 private:
+  GAME_MANAGER(); // Private constructor (singleton)
+
   /**
    * @brief Chance that the below T/F distr. will land on True
    */
@@ -35,33 +38,35 @@ private:
   std::mt19937 rng;
 
   /**
-   * @brief Obstacle textures
+   * @brief Onscreen obstacles (affected by render and update)
    */
-  std::vector<Texture2D> const &my_obstacle_textures;
+  std::vector<Obstacle> active_obstacles{};
 
-  /**
-   * @brief Distribution of obstacle texture indices
-   * Sampled randomly to choose a texture for the next obstacle
-   */
-  std::uniform_int_distribution<std::size_t> obstacle_spawn_distribution;
+public:
+  // Singleton
+  static GAME_MANAGER &getInstance()
+  {
+    static GAME_MANAGER instance; // Static in C++ = instantiated only ONCE
+    return instance;
+  }
 
-  /**
-   * @brief True/False distribution
-   * Sampled randomly to decide whether to spawn an enemy or not this interval
-   */
-  std::bernoulli_distribution coin_flip;
-
-  /**
-   * @brief Onscreen obstacles
-   * .first = Index of obstacle texture
-   * .second = Dest rect of obstacle
-   */
-  std::vector<std::pair<uint32_t, Rectangle>> active_obstacles{};
+  GAME_MANAGER(GAME_MANAGER const &) =
+      delete; // Delete copy (why would we ever copy a SINGLEton?)
+  void operator=(GAME_MANAGER const &) =
+      delete; // Delete equality (why would we ever need to compare a SINGLEton?)
 
   /**
    * @brief Advances obstacle spawn timer and spawns new obstacles according to set interval
+   * @param obstacle_texture_pool Container for possible obstacle textures we may use in spawning a new one
    */
-  void runObstacleSpawner();
+  void runObstacleSpawner(
+      std::vector<std::shared_ptr<Texture2D>> const &obstacle_texture_pool);
+
+  /**
+   * @brief Tries to find an obstacle colliding with given player
+   * If a first obstacle is found, it returns true
+   */
+  bool nikoTouchingObstacle(NIKO const &niko);
 
   /**
    * @brief Moves active obstacles
@@ -73,17 +78,10 @@ private:
    */
   void removeOffscreenObstacles();
 
-public:
-  explicit GAME_MANAGER(std::vector<Texture2D> const &obstacle_textures);
-
   /**
-   * @brief Tries to find an obstacle colliding with given player
-   * If a first obstacle is found, it returns true
+   * @brief Renders active obstacles
    */
-  bool nikoTouchingObstacle(NIKO const &niko);
-
   void renderObstacles();
-  void updateObstacles();
 };
 
 #endif

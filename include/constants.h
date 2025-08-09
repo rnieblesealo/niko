@@ -26,7 +26,7 @@ const uint32_t TARGET_FPS = 60;
 /**
  * @brief The velocity of things moving in the game
  */
-const uint32_t GAME_SPEED = 7;
+const uint32_t BASE_GAME_SPEED = 7;
 
 /**
  * @brief Identity directions
