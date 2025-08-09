@@ -3,7 +3,7 @@
 
 /**
  * @brief Contract for something that's a game object
- * A game object is something that's instantiated, is drawable, and needs to update in line with the game's state
+ * i.e. It re-renders and updates each frame
  * */
 class GAME_OBJECT_INTF
 {
@@ -16,9 +16,9 @@ public:
 
   /**
    * @brief Draws this object to the screen
-   * The parameters we use to do so might vary (Will we use a dest rect? Position? etc...)
+   * @param debug_mode Should this render visual debugging?
    */
-  virtual void render() = 0;
+  virtual void render(bool debug_mode) = 0;
 
   /**
    * @brief Updates this object's state

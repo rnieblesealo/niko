@@ -1,13 +1,14 @@
 #ifndef NIKO_H
 #define NIKO_H
 
+#include "game-object-intf.h"
 #include "spritesheet-renderer.h"
 #include "types.h"
 #include <cstdint>
 #include <filesystem>
 #include <raylib.h>
 
-class NIKO final
+class NIKO final : GAME_OBJECT_INTF
 {
 private:
   // NOTE: `const` suff should not be modified
@@ -37,7 +38,9 @@ public:
   {
   }
 
-  // Action
+  /**
+   * @brief Checks for jump input and starts jump if input register
+   */
   void startJump();
 
   // Getter/Setter
@@ -45,8 +48,8 @@ public:
   const CollisionCircle getCollisionCircle();
 
   // Update
-  void update();
-  void render(bool debug_mode = false);
+  void update() override;
+  void render(bool debug_mode = false) override;
 };
 
 #endif

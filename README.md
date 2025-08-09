@@ -99,3 +99,11 @@ Since singletons shouldn't have constructors with params (not sure why yet) I ha
 I also made a dedicated value object for obstacles that stores proper full texture references (not just an index) and the unique rect for that obstacle as members. This is more idiomatic and uncouples this from the texture pool array.
 
 This required, however, using shared pointers to manage the texture refs; using normal pointers is a bit shitty (we have to manage that mem. ourselves) and refs are unassignable since they're just an alias. The initial obstacle texture pool then stores all possible textures as shared pointers and we go from there!
+
+### What is a game object?
+
+Anything that "moves with the game"
+
+i.e. We care about updating + re-rendering it every frame 
+
+

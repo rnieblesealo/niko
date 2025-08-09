@@ -5,7 +5,7 @@
 #include <raylib.h>
 #include <vector>
 
-class SCENE final : public GAME_OBJECT_INTF
+class SCENE final : GAME_OBJECT_INTF
 {
 private:
   /**
@@ -55,7 +55,7 @@ public:
                       float            opacity = 1);
 
   void update() override;
-  void render() override;
+  void render(bool debug_mode) override;
 };
 
 #endif

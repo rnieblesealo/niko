@@ -52,7 +52,9 @@ void SCENE::update()
     }
   }
 }
-void SCENE::render()
+
+void SCENE::render(
+    bool debug_mode = false) // WARNING: Resume here; I think this needs to be in the .h
 {
   // Draw the floors
   for (const auto &floor_x_pos : my_floors)
