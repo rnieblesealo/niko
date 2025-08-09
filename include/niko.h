@@ -2,6 +2,7 @@
 #define NIKO_H
 
 #include "spritesheet-renderer.h"
+#include "types.h"
 #include <cstdint>
 #include <filesystem>
 #include <raylib.h>
@@ -40,8 +41,8 @@ public:
   void startJump();
 
   // Getter/Setter
-  void                      setPosition(int32_t x, int32_t y);
-  std::pair<Vector2, float> getCollisionCircle() const;
+  void                  setPosition(int32_t x, int32_t y);
+  const CollisionCircle getCollisionCircle();
 
   // Update
   void update();

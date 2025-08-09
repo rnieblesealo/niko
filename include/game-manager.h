@@ -66,7 +66,7 @@ public:
    * @brief Tries to find an obstacle colliding with given player
    * If a first obstacle is found, it returns true
    */
-  bool nikoTouchingObstacle(NIKO const &niko);
+  bool nikoTouchingObstacle(NIKO &niko);
 
   /**
    * @brief Moves active obstacles

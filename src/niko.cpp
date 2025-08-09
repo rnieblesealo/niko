@@ -1,6 +1,7 @@
 #include "niko.h"
 #include "constants.h"
 #include "raylib.h"
+#include "types.h"
 
 void NIKO::startJump()
 {
@@ -22,12 +23,12 @@ void NIKO::setPosition(int32_t x, int32_t y)
   this->my_position.y = y;
 }
 
-std::pair<Vector2, float> NIKO::getCollisionCircle() const
+const CollisionCircle NIKO::getCollisionCircle()
 {
-  const Vector2 collision_circle_pos = Vector2{this->my_position.x, this->my_position.y};
-  const float   collision_circle_radius = this->my_collision_radius;
+  Vector2  point  = Vector2{this->my_position.x, this->my_position.y};
+  uint32_t radius = this->my_collision_radius;
 
-  return {collision_circle_pos, collision_circle_radius};
+  return CollisionCircle{point, radius};
 }
 
 void NIKO::endJump()
@@ -84,7 +85,7 @@ void NIKO::render(bool debug_mode)
     // Draw collider
     auto my_col_circ = this->getCollisionCircle();
     DrawCircleLines(
-        my_col_circ.first.x, my_col_circ.first.y, my_col_circ.second, MAGENTA);
+        my_col_circ.point.x, my_col_circ.point.y, my_col_circ.radius, MAGENTA);
 
     // Draw a point at Niko's position to visualize it!
     DrawCircleV(this->my_position, 2, GREEN);

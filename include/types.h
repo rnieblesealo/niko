@@ -14,4 +14,13 @@ typedef struct Obstacle
   Rectangle rect;
 } Obstacle;
 
+/**
+ * @brief Collision circle defined by point + radius
+ */
+typedef struct CollisionCircle
+{
+  Vector2  point;
+  uint32_t radius;
+} CollisionCircle;
+
 #endif
