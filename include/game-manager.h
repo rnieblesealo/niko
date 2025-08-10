@@ -56,17 +56,16 @@ public:
       delete; // Delete equality (why would we ever need to compare a SINGLEton?)
 
   /**
+   * @brief Gets immutable ref to active obstacles
+   */
+  std::vector<Obstacle> const &getActiveObstacles();
+
+  /**
    * @brief Advances obstacle spawn timer and spawns new obstacles according to set interval
    * @param obstacle_texture_pool Container for possible obstacle textures we may use in spawning a new one
    */
   void runObstacleSpawner(
       std::vector<std::shared_ptr<Texture2D>> const &obstacle_texture_pool);
-
-  /**
-   * @brief Tries to find an obstacle colliding with given player
-   * If a first obstacle is found, it returns true
-   */
-  bool nikoTouchingObstacle(NIKO &niko);
 
   /**
    * @brief Moves active obstacles

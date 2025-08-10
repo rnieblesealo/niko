@@ -31,6 +31,22 @@ const CollisionCircle NIKO::getCollisionCircle()
   return CollisionCircle{point, radius};
 }
 
+bool NIKO::isTouchingAny(std::vector<Obstacle> obstacles)
+{
+  auto my_collider = this->getCollisionCircle();
+  auto first_collided_obstacle =
+      std::find_if(obstacles.begin(),
+                   obstacles.end(),
+                   [&](const auto &obstacle) -> bool
+                   {
+                     return CheckCollisionCircleRec(
+                         my_collider.point, my_collider.radius, obstacle.rect);
+                   });
+
+  // Did a collision happen?
+  return first_collided_obstacle != obstacles.end();
+}
+
 void NIKO::endJump()
 {
   this->my_velocity.y = 0;

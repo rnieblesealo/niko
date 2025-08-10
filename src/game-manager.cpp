@@ -65,20 +65,9 @@ void GAME_MANAGER::removeOffscreenObstacles()
       active_obstacles.end());
 }
 
-bool GAME_MANAGER::nikoTouchingObstacle(NIKO &niko)
+std::vector<Obstacle> const &GAME_MANAGER::getActiveObstacles()
 {
-  auto player_collider = niko.getCollisionCircle();
-  auto first_collided_obstacle =
-      std::find_if(active_obstacles.begin(),
-                   active_obstacles.end(),
-                   [&](const auto &obstacle) -> bool
-                   {
-                     return CheckCollisionCircleRec(
-                         player_collider.point, player_collider.radius, obstacle.rect);
-                   });
-
-  // Did a collision happen?
-  return first_collided_obstacle != active_obstacles.end();
+  return this->active_obstacles;
 }
 
 void GAME_MANAGER::renderObstacles()

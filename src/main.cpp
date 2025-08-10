@@ -4,6 +4,7 @@
 #include "niko.h"
 #include "scene.h"
 #include "spritesheet-renderer.h"
+#include <cstdlib>
 #include <filesystem>
 #include <raylib.h>
 
@@ -16,8 +17,8 @@ int main(void)
   // =========================================================================================
 
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE.c_str());
-  InitAudioDevice();
   SetTargetFPS(TARGET_FPS);
+  InitAudioDevice();
   SetTraceLogLevel(LOG_ALL);
 
   // =========================================================================================
@@ -91,6 +92,11 @@ int main(void)
     // =====================================================================================
 
     niko.update();
+
+    if (niko.isTouchingAny(GAME_MANAGER::getInstance().getActiveObstacles())){
+      exit(EXIT_SUCCESS); // NOTE: Test :p
+    }
+
     scene.update();
 
     GAME_MANAGER::getInstance().removeOffscreenObstacles();

@@ -54,8 +54,17 @@ public:
    * @param x Sets Niko's X coord
    * @param y Sets Niko's X coord
    */
-  void                  setPosition(int32_t x, int32_t y);
+  void setPosition(int32_t x, int32_t y);
+
+  /**
+   * @brief Gets Niko's collision circle
+   */
   const CollisionCircle getCollisionCircle();
+
+  /**
+   * @brief Checks if Niko is colliding against any obstacles in the given collection
+   */
+  bool isTouchingAny(std::vector<Obstacle> obstacles);
 };
 
 #endif
