@@ -90,17 +90,6 @@ int main(void)
     // UPDATE GAME LOGIC
     // =====================================================================================
 
-    /**
-     * @note We should always update logic before rendering! When rendering, we want the most
-     * up-to-date game; that makes sense
-     */
-
-    // Scan for input to make player jump
-    if (IsKeyDown(KEY_SPACE))
-    {
-      niko.startJump();
-    }
-
     niko.update();
     scene.update();
 

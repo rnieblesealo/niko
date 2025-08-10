@@ -60,6 +60,14 @@ void NIKO::update()
       endJump();
     }
   }
+
+  // This must go here so jumps work; not sure why
+  // Probably due to the way is_grounded is set...
+  // TODO: Make keys not hardcoded? Is that too much?
+  if (IsKeyDown(KEY_SPACE))
+  {
+    this->startJump();
+  }
 }
 
 void NIKO::render(bool debug_mode)

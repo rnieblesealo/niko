@@ -26,10 +26,18 @@ private:
   uint32_t my_jump_timer;
   bool     is_grounded;
 
+  /**
+   * @brief Sets velocity, position, effects and state according to starting a jump
+   */
+  void startJump();
+
+  /**
+   * @brief Sets velocity, position, effects and state according to landing from a jump
+   */
   void endJump();
 
 public:
-  NIKO(std::shared_ptr<SPRITESHEET_RENDERER> spritesheet_renderer)
+  explicit NIKO(std::shared_ptr<SPRITESHEET_RENDERER> spritesheet_renderer)
       : my_position({Vector2{0, 0}})
       , my_velocity({Vector2{0, 0}})
       , my_collision_radius(20)
@@ -40,11 +48,6 @@ public:
       , my_spritesheet_renderer(spritesheet_renderer)
   {
   }
-
-  /**
-   * @brief Checks for jump input and starts jump if input register
-   */
-  void startJump();
 
   /**
    * @brief Sets Niko's position

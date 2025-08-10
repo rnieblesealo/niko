@@ -115,3 +115,4 @@ i.e. We care about updating + re-rendering it every frame
     - **Reason:** It self-documents the why of the divergence from the otherwise expected contract 
 - Optional arg initial values should be defined in the HEADERFILE 
     - **Reason:** Default args are added via the .h and not in the definition 
+- Always use explicit constructors to avoid weirdness from type conversions
