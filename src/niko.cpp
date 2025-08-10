@@ -78,7 +78,7 @@ void NIKO::render(bool debug_mode)
                             my_frame_width,
                             my_frame_height};
 
-  this->my_spritesheet_renderer->render(my_draw_dest);
+  this->my_spritesheet_renderer->renderToDest(my_draw_dest);
 
   if (debug_mode)
   {

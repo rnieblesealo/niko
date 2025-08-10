@@ -29,7 +29,7 @@ void SPRITESHEET_RENDERER::setFPS(uint32_t t) { this->my_fps = t; }
 
 void SPRITESHEET_RENDERER::enableOutline(bool t) { this->should_render_outline = t; }
 
-void SPRITESHEET_RENDERER::render(Rectangle &dest)
+void SPRITESHEET_RENDERER::renderToDest(Rectangle &dest)
 {
   this->advanceFrames();
 
@@ -57,8 +57,10 @@ void SPRITESHEET_RENDERER::renderOutline(Rectangle &dest)
   const int OUTLINE_THICKNESS_WIDTH = 4;
   for (const auto &dir : DIRECTIONS)
   {
-    Rectangle dest_outline = {
-        dest.x + OUTLINE_THICKNESS_WIDTH * dir.x, dest.y + OUTLINE_THICKNESS_WIDTH * dir.y, dest.width, dest.height};
+    Rectangle dest_outline = {dest.x + OUTLINE_THICKNESS_WIDTH * dir.x,
+                              dest.y + OUTLINE_THICKNESS_WIDTH * dir.y,
+                              dest.width,
+                              dest.height};
 
     DrawTexturePro(this->my_active_spritesheet->spritesheet,
                    this->my_frame_rect,
@@ -81,9 +83,11 @@ bool SPRITESHEET_RENDERER::setSpritesheet(std::string key)
   /**
    * @note We assume a vertically stacked spritesheet, always!
    */
-  this->setFrameDimensions(static_cast<float>(this->my_active_spritesheet->spritesheet.width),
-                           static_cast<float>(static_cast<float>(this->my_active_spritesheet->spritesheet.height) /
-                                              this->my_active_spritesheet->frame_count)
+  this->setFrameDimensions(
+      static_cast<float>(this->my_active_spritesheet->spritesheet.width),
+      static_cast<float>(
+          static_cast<float>(this->my_active_spritesheet->spritesheet.height) /
+          this->my_active_spritesheet->frame_count)
 
   );
 

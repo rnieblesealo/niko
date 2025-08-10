@@ -7,6 +7,10 @@
 
 class SCENE final : GAME_OBJECT_INTF
 {
+public:
+  void update() override;
+  void render(bool debug_mode = false) override;
+
 private:
   /**
    * @brief Texture of the floor
@@ -53,9 +57,6 @@ public:
                       Vector2          pos,
                       uint32_t         scale   = 1,
                       float            opacity = 1);
-
-  void update() override;
-  void render(bool debug_mode) override;
 };
 
 #endif

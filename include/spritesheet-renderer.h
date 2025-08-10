@@ -90,7 +90,8 @@ private:
   void renderOutline(Rectangle &dest);
 
 public:
-  explicit SPRITESHEET_RENDERER(std::map<std::string, SPRITESHEET const &> const &spritesheets)
+  explicit SPRITESHEET_RENDERER(
+      std::map<std::string, SPRITESHEET const &> const &spritesheets)
       : my_spritesheets(spritesheets)
       , my_active_spritesheet(nullptr) // No animation is active by default!
       , my_fps(DEFAULT_FPS)
@@ -135,7 +136,7 @@ public:
    * @brief Advances the animation and renders the animated spritesheet
    * @param dest Screen-relative rect where the sprite will be drawn
    */
-  void render(Rectangle &dest);
+  void renderToDest(Rectangle &dest);
 };
 
 #endif

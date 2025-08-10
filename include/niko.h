@@ -10,8 +10,11 @@
 
 class NIKO final : GAME_OBJECT_INTF
 {
+public:
+  void update() override;
+  void render(bool debug_mode = false) override;
+
 private:
-  // NOTE: `const` suff should not be modified
   const std::shared_ptr<SPRITESHEET_RENDERER> my_spritesheet_renderer;
 
   const Sound sfx_jump;
@@ -43,13 +46,13 @@ public:
    */
   void startJump();
 
-  // Getter/Setter
+  /**
+   * @brief Sets Niko's position
+   * @param x Sets Niko's X coord
+   * @param y Sets Niko's X coord
+   */
   void                  setPosition(int32_t x, int32_t y);
   const CollisionCircle getCollisionCircle();
-
-  // Update
-  void update() override;
-  void render(bool debug_mode = false) override;
 };
 
 #endif

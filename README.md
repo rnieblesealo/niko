@@ -106,4 +106,12 @@ Anything that "moves with the game"
 
 i.e. We care about updating + re-rendering it every frame 
 
+### Code Style
 
+- Game object interface methods should go in public/private heading AT TOP of child class
+    - **Reason:** Clearly separating inherited vs. self methods
+- If anything renders/updates but requires params (which game object intf forbids) the methods they use to do so should specify the difference the args make
+> e.g. Since spritesheet renderer requires a dest rect, its **render** method should be called something like **renderToDest**
+    - **Reason:** It self-documents the why of the divergence from the otherwise expected contract 
+- Optional arg initial values should be defined in the HEADERFILE 
+    - **Reason:** Default args are added via the .h and not in the definition 

@@ -117,14 +117,12 @@ int main(void)
 
     GAME_MANAGER::getInstance().renderObstacles();
 
-    /*
     GUI::drawTitle("Niko The\n\tNicotine-Addicted\n\t\tPunk Salamander",
                    IMPACT_FONT,
                    32,
                    2,
                    -90,
                    true);
-    */
 
     // Draw some clouds; completely eyeballed!
     scene.drawStaticProp(cloud_texture, Vector2{130, 22}, 4, 0.3);
@@ -132,14 +130,15 @@ int main(void)
     scene.drawStaticProp(cloud_texture, Vector2{-16, 127}, 2, 0.1);
     scene.render();
 
-    niko.render(true);
+    niko.render();
 
     EndDrawing();
   }
 
-  UnloadTexture(
-      spr_niko_run); // TODO: Take care of these... You aren't freeing everything
+  // FIXME: No alloc'd raylib resources are being freed correctly!
+  UnloadTexture(spr_niko_run);
   UnloadTexture(spr_niko_jump);
+  // Add the rest...
 
   CloseWindow();
 
