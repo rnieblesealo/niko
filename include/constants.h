@@ -59,6 +59,7 @@ const uint32_t FLOOR_Y_POS = 320;
 namespace COLORPAL_12J4NK
 {
 const Color NK_BLUE = {23, 115, 184, 255}; // r, g, b, a
-}
+const Color NK_RED  = {190, 83, 72, 255};
+} // namespace COLORPAL_12J4NK
 
 #endif

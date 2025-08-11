@@ -93,7 +93,8 @@ int main(void)
 
     niko.update();
 
-    if (niko.isTouchingAny(GAME_MANAGER::getInstance().getActiveObstacles())){
+    if (niko.isTouchingAny(GAME_MANAGER::getInstance().getActiveObstacles()))
+    {
       exit(EXIT_SUCCESS); // NOTE: Test :p
     }
 
@@ -112,12 +113,7 @@ int main(void)
 
     GAME_MANAGER::getInstance().renderObstacles();
 
-    GUI::drawTitle("Niko The\n\tNicotine-Addicted\n\t\tPunk Salamander",
-                   IMPACT_FONT,
-                   32,
-                   2,
-                   -90,
-                   true);
+    GUI::drawBigText("Niko The\n\tNicotine-Addicted\n\t\tPunk Salamander", IMPACT_FONT);
 
     // Draw some clouds; completely eyeballed!
     scene.drawStaticProp(cloud_texture, Vector2{130, 22}, 4, 0.3);

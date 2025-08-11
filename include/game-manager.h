@@ -1,7 +1,6 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
 
-#include "niko.h"
 #include "types.h"
 #include <random>
 #include <raylib.h>
