@@ -113,7 +113,16 @@ int main(void)
 
     GAME_MANAGER::getInstance().renderObstacles();
 
-    GUI::drawBigText("Niko The\n\tNicotine-Addicted\n\t\tPunk Salamander", IMPACT_FONT);
+    // Draw game over/title
+    if (GAME_MANAGER::getInstance().getCurrentState() == GAME_MANAGER::GAME_STATE::TITLE)
+    {
+      GUI::drawBigText("Niko The\n\tNicotine-Addicted\n\t\tPunk Salamander", IMPACT_FONT);
+    }
+    else if (GAME_MANAGER::getInstance().getCurrentState() ==
+             GAME_MANAGER::GAME_STATE::TITLE)
+    {
+      GUI::drawBigText("GAME OVER!", IMPACT_FONT, 54, 2, 0, NK_RED, true, 3);
+    }
 
     // Draw some clouds; completely eyeballed!
     scene.drawStaticProp(cloud_texture, Vector2{130, 22}, 4, 0.3);

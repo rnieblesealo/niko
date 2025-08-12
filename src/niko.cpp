@@ -1,5 +1,6 @@
 #include "niko.h"
 #include "constants.h"
+#include "game-manager.h"
 #include "raylib.h"
 #include "types.h"
 
@@ -82,7 +83,19 @@ void NIKO::update()
   // TODO: Make keys not hardcoded? Is that too much?
   if (IsKeyDown(KEY_SPACE))
   {
-    this->startJump();
+    switch (GAME_MANAGER::getInstance().getCurrentState())
+    {
+    case GAME_MANAGER::GAME_STATE::TITLE:
+      GAME_MANAGER::getInstance().advanceState();
+      this->startJump();
+      break;
+    case GAME_MANAGER::GAME_STATE::IN_GAME:
+      this->startJump();
+      break;
+    case GAME_MANAGER::GAME_STATE::GAME_OVER:
+      GAME_MANAGER::getInstance().advanceState();
+      break;
+    }
   }
 }
 
