@@ -12,7 +12,7 @@ void GAME_MANAGER::runObstacleSpawner(
 {
   obstacle_spawn_timer++;
 
-  if (obstacle_spawn_timer >= (TARGET_FPS / obstacle_spawn_rate))
+  if (obstacle_spawn_timer >= (TARGET_FPS / OBSTACLE_SPAWN_RATE))
   {
     // "Flip coin" (i.e. instantiate a quick bernoulli distr.) to figure out whether we will spawn
     bool will_spawn_obstacle = std::bernoulli_distribution{this->HEADS_CHANCE}(rng);
@@ -80,5 +80,32 @@ void GAME_MANAGER::renderObstacles()
                   0,
                   static_cast<float>(OBSTACLE_DIMENSIONS.x) / obstacle.texture->width,
                   WHITE);
+  }
+}
+
+void GAME_MANAGER::advanceState()
+{
+  // Before we directly set the state, check what numeric value next state would have
+  // If it's offbounds, set it back to 0
+  // Then set the enum
+  // This helps address C++'s disallowing of doing arithmetic on enums and handles wrapping to the first state
+
+  uint8_t next_state = static_cast<uint8_t>(current_state) + 1;
+  if (next_state > static_cast<uint8_t>(GAME_STATE::GAME_OVER))
+  {
+    next_state = 0;
+  }
+
+  this->current_state = static_cast<GAME_STATE>(next_state);
+
+  // Cleanup logic
+  switch (current_state)
+  {
+  case GAME_STATE::TITLE:
+    break;
+  case GAME_STATE::IN_GAME:
+    break;
+  case GAME_STATE::GAME_OVER:
+    break;
   }
 }

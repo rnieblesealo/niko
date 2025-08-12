@@ -7,9 +7,31 @@
 
 class GAME_MANAGER final
 {
+public:
+  /**
+   * @brief Game state, determines global behavior
+   */
+  enum class GAME_STATE : uint8_t
+  {
+    /**
+     * @brief Title shown, no spawns, no "gameplay" is running; waiting for input to start!
+     */
+    TITLE = 0,
+
+    /**
+     * @brief Meat and bones; the "main" game
+     */
+    IN_GAME = 1,
+
+    /**
+     * @brief Everything is frozen and game over text is shown
+     * @note This should ALWAYS be the last value!
+     */
+    GAME_OVER = 2
+  };
+
 private:
   GAME_MANAGER(); // Private constructor (singleton)
-
   /**
    * @brief Chance that the below T/F distr. will land on True
    */
@@ -24,7 +46,12 @@ private:
    * @brief Interval of obstacle spawn
    * (In spawns per second)
    */
-  const uint32_t obstacle_spawn_rate = 1;
+  const uint32_t OBSTACLE_SPAWN_RATE = 1;
+
+  /**
+   * @brief The current state
+   */
+  GAME_STATE current_state = GAME_STATE::TITLE;
 
   /**
    * @brief Timer to next obstacle spawn
@@ -58,6 +85,11 @@ public:
    * @brief Gets immutable ref to active obstacles
    */
   std::vector<Obstacle> const &getActiveObstacles();
+
+  /**
+   * @brief Advances to the next state; see GAME_STATE enum
+   */
+  void advanceState();
 
   /**
    * @brief Advances obstacle spawn timer and spawns new obstacles according to set interval

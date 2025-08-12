@@ -1,3 +1,19 @@
+### Todo!
+
+- [ ] Speedup as time increases
+    - For this to be fair, it'll require 
+    - [ ] Varying jump height via press
+- [ ] Game over/lose
+- [ ] Score system
+    - [ ]
+- [ ] Floor decorations :)
+- [ ] High score on homescreen
+
+### Can
+
+- Crouching
+- Different obstacle types
+
 messing around with raylb 
 
 check it
@@ -120,3 +136,47 @@ i.e. We care about updating + re-rendering it every frame
 ### GUI + Relative Pos
 
 - GUI currently uses px offsets but a static pos is 101% the better way to go here
+
+### Game States
+
+- 3 states title, ingame, game over
+    - Title: highscore + gametitle show, no spawns, cant control niko, not keeping score, not speeding up, floor moving Ingame: curr score shows on top right, no gametitle show, enemies spawn, can control niko, keeping score + speeding up
+    - Game over: highscore on center, 
+- Variables:
+    - highscore shows? 
+        - top right or screen center?
+    - game title shows?
+    - game over shows?
+    - spawns enabled?
+    - niko controllable?
+    - score being kept?
+        - speeding up? (will speed up based on score so these are coupled)
+    - floor moving? 
+    - sprite animations on?
+    - gravity on?
+- Handling:
+    - Enum that keeps 3 game states on game manager
+    - States are main menu -> ingame -> game over -> main menu -> ... (should ALWAYS follow that cycle)
+    - setState function that also calls required "cleanup/reset" logic upon state switching
+        - We will need this to clear enemies on restart, reset niko's pos, change gui, etc. 
+    - Then, on each individual object, we check the state of the enum to determine what logic to do
+    - Pros:
+        - Meaningful state tracking (literally ask, "is state game over?")
+        - Code should be more readable (e.g. "if game state == game over then do ..." makes a lot of sense)
+        - Easy state switching (just change the enum and according to above everything's logic should update)
+    - Cons:
+        - Decentralized logic makes related state scattered (e.g. if floor moving and animation is kept separate, the floor can be static while animations are on, which doesn't make sense if the state idiomatically means everything should be frozen)
+        - We can't check individual variables if needed, only the current state (if we specifically need to check if spawns are enabled, we'd need a specific flag for this, since multiple game states may share the same logic)
+        - setState might break if we switch between 2 unintended states (e.g. if we want to go from game over to in game without passing main menu, state might not be set correctly...)
+    - Amends: 
+        - Enforce cyclic state switching 
+            - Add check that prevents setState from moving to illegal state
+            - advanceState (increment the enum state by 1 and enforce the order via the enum values)
+                - This actually seems like best soln... Sufficiently abstracts stuff while also enforcing cyclic state
+    - Verdict:
+        - [ ] 3-state enum with currentState variable in GAME_MANAGER
+        - [ ] advanceState ++'s the curr state moving to the required next
+            - e.g. if currentState == MAIN_MENU, advanceState() would ++ main menu and make currentState == IN_GAME.
+                - First increment state 
+                - Then based on newly set state run the required cleanup/advance logic (this could literally be a switch statement)
+        - [ ] Individual objects then call GAME_MANAGER singleton, check the state, and adjust their update() and render() logic based on it 
