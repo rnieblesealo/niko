@@ -174,9 +174,14 @@ i.e. We care about updating + re-rendering it every frame
             - advanceState (increment the enum state by 1 and enforce the order via the enum values)
                 - This actually seems like best soln... Sufficiently abstracts stuff while also enforcing cyclic state
     - Verdict:
-        - [ ] 3-state enum with currentState variable in GAME_MANAGER
+        - [x] 3-state enum with currentState variable in GAME_MANAGER
         - [ ] advanceState ++'s the curr state moving to the required next
             - e.g. if currentState == MAIN_MENU, advanceState() would ++ main menu and make currentState == IN_GAME.
                 - First increment state 
                 - Then based on newly set state run the required cleanup/advance logic (this could literally be a switch statement)
         - [ ] Individual objects then call GAME_MANAGER singleton, check the state, and adjust their update() and render() logic based on it 
+    - Todos (individual gamestate-determined logic):
+        - [ ] Gui 
+        - [ ] Niko 
+        - [x] Scene  
+        - [ ] Spritesheet renderer

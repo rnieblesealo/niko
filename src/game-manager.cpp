@@ -109,3 +109,5 @@ void GAME_MANAGER::advanceState()
     break;
   }
 }
+
+GAME_MANAGER::GAME_STATE GAME_MANAGER::getCurrentState() { return this->current_state; }

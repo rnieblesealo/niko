@@ -87,6 +87,11 @@ public:
   std::vector<Obstacle> const &getActiveObstacles();
 
   /**
+   * @brief Gets the current state
+   */
+  GAME_MANAGER::GAME_STATE getCurrentState();
+
+  /**
    * @brief Advances to the next state; see GAME_STATE enum
    */
   void advanceState();

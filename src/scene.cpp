@@ -1,5 +1,6 @@
 #include "scene.h"
 #include "constants.h"
+#include "game-manager.h"
 #include <algorithm>
 #include <raylib.h>
 
@@ -38,23 +39,26 @@ void SCENE::drawStaticProp(Texture2D const &static_prop_texture,
 
 void SCENE::update()
 {
-  // Move the 2 floors to create effect
-  for (auto &floor_x_pos : my_floors)
+  if (GAME_MANAGER::getInstance().getCurrentState() !=
+      GAME_MANAGER::GAME_STATE::GAME_OVER)
   {
-    floor_x_pos -= BASE_GAME_SPEED;
-    if (floor_x_pos < -static_cast<float>(SCREEN_WIDTH))
+    // Move the 2 floors to create effect
+    for (auto &floor_x_pos : my_floors)
     {
-      floor_x_pos =
-          SCREEN_WIDTH -
-          (abs(floor_x_pos) -
-           abs(static_cast<float>(
-               SCREEN_WIDTH))); // Compensate for the amount of space we went over the shift point
+      floor_x_pos -= BASE_GAME_SPEED;
+      if (floor_x_pos < -static_cast<float>(SCREEN_WIDTH))
+      {
+        floor_x_pos =
+            SCREEN_WIDTH -
+            (abs(floor_x_pos) -
+             abs(static_cast<float>(
+                 SCREEN_WIDTH))); // Compensate for the amount of space we went over the shift point
+      }
     }
   }
 }
 
-void SCENE::render(
-    bool debug_mode)
+void SCENE::render(bool debug_mode)
 {
   // Draw the floors
   for (const auto &floor_x_pos : my_floors)
