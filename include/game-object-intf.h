@@ -5,13 +5,14 @@
  * @brief Contract for something that's a game object
  * i.e. It re-renders and updates each frame
  * */
+#include <memory>
 class GAME_OBJECT_INTF
 {
 protected:
   GAME_OBJECT_INTF() = default;
 
 public:
-  // NOTE: Virtual destructor ensures when child class is deleted, its constructor is called first
+  // NOTE: Virtual destructor ensures when child class is deleted, its inherited destructor is called first
   virtual ~GAME_OBJECT_INTF() = default;
 
   /**
@@ -25,6 +26,11 @@ public:
    * State updates should always take place before drawing!
    */
   virtual void update() = 0;
+
+  /**
+   * @brief Equality for 2 game objects means they have the same address; ergo, they are literally the same object!
+   */
+  bool operator==(const GAME_OBJECT_INTF &other) { return this == std::addressof(other); }
 };
 
 #endif

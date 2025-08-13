@@ -111,3 +111,22 @@ void GAME_MANAGER::advanceState()
 }
 
 GAME_MANAGER::GAME_STATE GAME_MANAGER::getCurrentState() { return this->current_state; }
+
+void GAME_MANAGER::addObserver(GAME_OBJECT_INTF &observer)
+{
+  this->observers.push_back(observer);
+}
+
+void GAME_MANAGER::removeObserver(GAME_OBJECT_INTF const &observer)
+{
+  this->observers.erase(std::remove_if(this->observers.begin(),
+                                       this->observers.end(),
+                                       [&](GAME_OBJECT_INTF const &curr) -> bool
+                                       {
+                                         // Custom types in C++ need to define equality operator or otherwise we must use their addresses
+                                         // Since game object is a contract and it has no members that establish identity, we use mem. addresses
+                                         return &curr == &observer;
+                                       })
+
+  );
+}

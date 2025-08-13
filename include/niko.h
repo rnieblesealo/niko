@@ -5,7 +5,6 @@
 #include "spritesheet-renderer.h"
 #include "types.h"
 #include <cstdint>
-#include <filesystem>
 #include <raylib.h>
 
 class NIKO final : GAME_OBJECT_INTF
@@ -37,17 +36,11 @@ private:
   void endJump();
 
 public:
-  explicit NIKO(std::shared_ptr<SPRITESHEET_RENDERER> spritesheet_renderer)
-      : my_position({Vector2{0, 0}})
-      , my_velocity({Vector2{0, 0}})
-      , my_collision_radius(20)
-      , my_jump_timer(0)
-      , is_grounded(false)
-      , sfx_jump(LoadSound(std::filesystem::path("assets/jump.wav").c_str()))
-      , sfx_land(LoadSound(std::filesystem::path("assets/land.wav").c_str()))
-      , my_spritesheet_renderer(spritesheet_renderer)
-  {
-  }
+  /**
+   * @param spritesheet_renderer The spritesheet renderer for Niko
+   */
+  explicit NIKO(std::shared_ptr<SPRITESHEET_RENDERER> spritesheet_renderer);
+  ~NIKO() override;
 
   /**
    * @brief Sets Niko's position

@@ -1,8 +1,29 @@
 #include "niko.h"
 #include "constants.h"
+#include "filesystem"
 #include "game-manager.h"
 #include "raylib.h"
 #include "types.h"
+
+NIKO::NIKO(std::shared_ptr<SPRITESHEET_RENDERER> spritesheet_renderer)
+    : my_position({Vector2{0, 0}})
+    , my_velocity({Vector2{0, 0}})
+    , my_collision_radius(20)
+    , my_jump_timer(0)
+    , is_grounded(false)
+    , sfx_jump(LoadSound(std::filesystem::path("assets/jump.wav").c_str()))
+    , sfx_land(LoadSound(std::filesystem::path("assets/land.wav").c_str()))
+    , my_spritesheet_renderer(spritesheet_renderer)
+{
+  // Need to dereference pointer since add observer takes a mutable ref
+  GAME_MANAGER::getInstance().addObserver(*this);
+}
+
+NIKO::~NIKO()
+{
+  // Since we used virtual destructor this destructor will run after parent's does
+  GAME_MANAGER::getInstance().removeObserver(*this);
+}
 
 void NIKO::startJump()
 {

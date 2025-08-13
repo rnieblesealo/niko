@@ -182,6 +182,6 @@ i.e. We care about updating + re-rendering it every frame
         - [ ] Individual objects then call GAME_MANAGER singleton, check the state, and adjust their update() and render() logic based on it 
     - Todos (individual gamestate-determined logic):
         - [ ] Gui 
-        - [ ] Niko 
+        - [x] Niko 
         - [x] Scene  
-        - [ ] Spritesheet renderer
+        - [x] Spritesheet renderer

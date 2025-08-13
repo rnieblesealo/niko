@@ -1,6 +1,7 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
 
+#include "game-object-intf.h"
 #include "types.h"
 #include <random>
 #include <raylib.h>
@@ -68,6 +69,11 @@ private:
    */
   std::vector<Obstacle> active_obstacles{};
 
+  /**
+   * @brief Stores observer game objects
+   */
+  std::vector<std::reference_wrapper<GAME_OBJECT_INTF>> observers{};
+
 public:
   // Singleton
   static GAME_MANAGER &getInstance()
@@ -95,6 +101,16 @@ public:
    * @brief Advances to the next state; see GAME_STATE enum
    */
   void advanceState();
+
+  /**
+   * @brief Adds an observer game object
+   */
+  void addObserver(GAME_OBJECT_INTF &observer);
+
+  /**
+   * @brief Removes an observer game object
+   */
+  void removeObserver(GAME_OBJECT_INTF const &observer);
 
   /**
    * @brief Advances obstacle spawn timer and spawns new obstacles according to set interval
