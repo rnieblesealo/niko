@@ -39,8 +39,7 @@ void SCENE::drawStaticProp(Texture2D const &static_prop_texture,
 
 void SCENE::update()
 {
-  if (GAME_MANAGER::getInstance().getCurrentState() !=
-      GAME_MANAGER::GAME_STATE::GAME_OVER)
+  if (GAME_MANAGER::getInstance().getCurrentState() != GAME_STATE::GAME_OVER)
   {
     // Move the 2 floors to create effect
     for (auto &floor_x_pos : my_floors)

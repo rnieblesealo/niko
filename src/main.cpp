@@ -93,16 +93,28 @@ int main(void)
 
     niko.update();
 
-    if (niko.isTouchingAny(GAME_MANAGER::getInstance().getActiveObstacles()))
+    if (niko.isTouchingAny(GAME_MANAGER::getInstance().getActiveObstacles()) &&
+        // Only register collisions if in game
+        GAME_MANAGER::getInstance().getCurrentState() == GAME_STATE::IN_GAME)
     {
-      exit(EXIT_SUCCESS); // NOTE: Test :p
+      GAME_MANAGER::getInstance().advanceState();
     }
 
     scene.update();
 
+    // Only spawn obstacles in regular gameplay
+    if (GAME_MANAGER::getInstance().getCurrentState() == GAME_STATE::IN_GAME)
+    {
+      GAME_MANAGER::getInstance().moveActiveObstacles();
+      GAME_MANAGER::getInstance().runObstacleSpawner(obstacle_textures);
+
+      // TODO: Resume here; need to clear all obstacles and reset Niko when switching state!
+      // You might also have a circular dep here (gameman must call gameobjects to run cleanup, but they also depend on gameman to check state...)
+      // Suggest using observer pattern with GAME_OBJECT contract!
+    }
+
+    // But always handle offscreen obstacles as safety!
     GAME_MANAGER::getInstance().removeOffscreenObstacles();
-    GAME_MANAGER::getInstance().moveActiveObstacles();
-    GAME_MANAGER::getInstance().runObstacleSpawner(obstacle_textures);
 
     // =====================================================================================
     // RENDERING
@@ -114,12 +126,11 @@ int main(void)
     GAME_MANAGER::getInstance().renderObstacles();
 
     // Draw game over/title
-    if (GAME_MANAGER::getInstance().getCurrentState() == GAME_MANAGER::GAME_STATE::TITLE)
+    if (GAME_MANAGER::getInstance().getCurrentState() == GAME_STATE::TITLE)
     {
       GUI::drawBigText("Niko The\n\tNicotine-Addicted\n\t\tPunk Salamander", IMPACT_FONT);
     }
-    else if (GAME_MANAGER::getInstance().getCurrentState() ==
-             GAME_MANAGER::GAME_STATE::TITLE)
+    else if (GAME_MANAGER::getInstance().getCurrentState() == GAME_STATE::GAME_OVER)
     {
       GUI::drawBigText("GAME OVER!", IMPACT_FONT, 54, 2, 0, NK_RED, true, 3);
     }

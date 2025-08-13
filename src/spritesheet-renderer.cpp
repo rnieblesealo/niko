@@ -4,8 +4,7 @@
 
 void SPRITESHEET_RENDERER::advanceFrames()
 {
-  if (GAME_MANAGER::getInstance().getCurrentState() ==
-      GAME_MANAGER::GAME_STATE::GAME_OVER)
+  if (GAME_MANAGER::getInstance().getCurrentState() == GAME_STATE::GAME_OVER)
   {
     return;
   }

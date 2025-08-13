@@ -23,4 +23,26 @@ typedef struct CollisionCircle
   uint32_t radius;
 } CollisionCircle;
 
+/**
+ * @brief Game state, determines global behavior
+ */
+enum class GAME_STATE : uint8_t
+{
+  /**
+   * @brief Title shown, no spawns, no "gameplay" is running; waiting for input to start!
+   */
+  TITLE = 0,
+
+  /**
+   * @brief Meat and bones; the "main" game
+   */
+  IN_GAME = 1,
+
+  /**
+   * @brief Everything is frozen and game over text is shown
+   * @note This should ALWAYS be the last value!
+   */
+  GAME_OVER = 2
+};
+
 #endif

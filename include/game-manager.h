@@ -8,29 +8,6 @@
 
 class GAME_MANAGER final
 {
-public:
-  /**
-   * @brief Game state, determines global behavior
-   */
-  enum class GAME_STATE : uint8_t
-  {
-    /**
-     * @brief Title shown, no spawns, no "gameplay" is running; waiting for input to start!
-     */
-    TITLE = 0,
-
-    /**
-     * @brief Meat and bones; the "main" game
-     */
-    IN_GAME = 1,
-
-    /**
-     * @brief Everything is frozen and game over text is shown
-     * @note This should ALWAYS be the last value!
-     */
-    GAME_OVER = 2
-  };
-
 private:
   GAME_MANAGER(); // Private constructor (singleton)
   /**
@@ -95,7 +72,7 @@ public:
   /**
    * @brief Gets the current state
    */
-  GAME_MANAGER::GAME_STATE getCurrentState();
+  GAME_STATE getCurrentState();
 
   /**
    * @brief Advances to the next state; see GAME_STATE enum

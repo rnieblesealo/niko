@@ -110,7 +110,7 @@ void GAME_MANAGER::advanceState()
   }
 }
 
-GAME_MANAGER::GAME_STATE GAME_MANAGER::getCurrentState() { return this->current_state; }
+GAME_STATE GAME_MANAGER::getCurrentState() { return this->current_state; }
 
 void GAME_MANAGER::addObserver(GAME_OBJECT_INTF &observer)
 {
