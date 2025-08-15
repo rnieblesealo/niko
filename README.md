@@ -8,7 +8,7 @@ this is Niko the Nicotine-Addicted Punk Salamander
 
 I started it on spare time i had after work during my lutron internship where where i wrote a shitton of production grade c++ and learend a bunch abotu how to make it *GOOD* good!
 
-So this is a silly little game where I try to exercise all the practices they taught me; the code is probably incredibly overkill and overengineered for what this is (a clone of chrome dinosaur with less steps) but it is meant to be practice for **thinking of and writing GOOD C++**.
+So this is a silly little game where I try to exercise all the practices they taught me; the code is most definitely incredibly overkill and overengineered for what this is (a clone of chrome dinosaur with less steps) but it is meant to be practice for **thinking of and writing GOOD C++**.
 
 enojoy!
 
