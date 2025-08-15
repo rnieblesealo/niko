@@ -98,15 +98,10 @@ void GAME_MANAGER::advanceState()
 
   this->current_state = static_cast<GAME_STATE>(next_state);
 
-  // Cleanup logic
-  switch (current_state)
+  // Propagate state change to observers
+  for (auto &observer : this->observers)
   {
-  case GAME_STATE::TITLE:
-    break;
-  case GAME_STATE::IN_GAME:
-    break;
-  case GAME_STATE::GAME_OVER:
-    break;
+    observer.get().onStateChangedTo(this->current_state);
   }
 }
 

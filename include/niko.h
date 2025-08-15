@@ -12,6 +12,7 @@ class NIKO final : GAME_OBJECT_INTF
 public:
   void update() override;
   void render(bool debug_mode = false) override;
+  void onStateChangedTo(GAME_STATE state) override;
 
 private:
   const std::shared_ptr<SPRITESHEET_RENDERER> my_spritesheet_renderer;

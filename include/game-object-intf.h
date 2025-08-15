@@ -1,11 +1,13 @@
 #ifndef GAME_OBJECT_INTF_H
 #define GAME_OBJECT_INTF_H
 
+#include "types.h"
+#include <memory>
+
 /**
  * @brief Contract for something that's a game object
  * i.e. It re-renders and updates each frame
  * */
-#include <memory>
 class GAME_OBJECT_INTF
 {
 protected:
@@ -26,6 +28,12 @@ public:
    * State updates should always take place before drawing!
    */
   virtual void update() = 0;
+
+  /**
+   * @brief Updates this object's state
+   * State updates should always take place before drawing!
+   */
+  virtual void onStateChangedTo(GAME_STATE state) = 0;
 
   /**
    * @brief Equality for 2 game objects means they have the same address; ergo, they are literally the same object!

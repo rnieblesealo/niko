@@ -49,7 +49,13 @@ const float GRAVITY = -0.5;
 /**
  * @brief Y-level of the floor
  */
-const uint32_t FLOOR_Y_POS = 320;
+const int32_t FLOOR_Y_POS = 320;
+
+/**
+ * @brief X position player should be at
+ */
+const int32_t PLAYER_X_POS = 100;
+
 } // namespace
 
 /**

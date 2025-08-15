@@ -65,3 +65,22 @@ void SCENE::render(bool debug_mode)
     DrawTexture(my_floor_texture, floor_x_pos, FLOOR_Y_POS, WHITE);
   }
 }
+
+void SCENE::onStateChangedTo(GAME_STATE state)
+{
+  switch (state)
+  {
+  case GAME_STATE::TITLE:
+  {
+    break;
+  }
+  case GAME_STATE::IN_GAME:
+  {
+    break;
+  }
+  case GAME_STATE::GAME_OVER:
+  {
+    break;
+  }
+  }
+}

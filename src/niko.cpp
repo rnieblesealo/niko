@@ -149,3 +149,23 @@ void NIKO::render(bool debug_mode)
     DrawCircleV(this->my_position, 2, GREEN);
   }
 }
+
+void NIKO::onStateChangedTo(GAME_STATE state)
+{
+  switch (state)
+  {
+  case GAME_STATE::TITLE:
+  {
+    this->setPosition(PLAYER_X_POS, FLOOR_Y_POS);
+    break;
+  }
+  case GAME_STATE::IN_GAME:
+  {
+    break;
+  }
+  case GAME_STATE::GAME_OVER:
+  {
+    break;
+  }
+  }
+}

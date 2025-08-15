@@ -54,7 +54,7 @@ int main(void)
   NIKO niko(niko_spritesheet_renderer);
 
   // Apply some settings to Niko
-  niko.setPosition(100, FLOOR_Y_POS);
+  niko.setPosition(PLAYER_X_POS, FLOOR_Y_POS);
 
   // =========================================================================================
   // SCENE SETUP
