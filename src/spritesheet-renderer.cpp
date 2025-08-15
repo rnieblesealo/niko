@@ -1,14 +1,8 @@
 #include "spritesheet-renderer.h"
 #include "constants.h"
-#include "game-manager.h"
 
 void SPRITESHEET_RENDERER::advanceFrames()
 {
-  if (GAME_MANAGER::getInstance().getCurrentState() == GAME_STATE::GAME_OVER)
-  {
-    return;
-  }
-
   this->my_frame_counter++;
 
   if (this->my_frame_counter >= (TARGET_FPS / this->my_fps))

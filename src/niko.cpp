@@ -102,20 +102,18 @@ void NIKO::update()
   // This must go here so jumps work; not sure why
   // Probably due to the way is_grounded is set...
   // TODO: Make keys not hardcoded? Is that too much?
-  if (IsKeyDown(KEY_SPACE))
+  if (IsKeyPressed(KEY_SPACE))
   {
-    switch (GAME_MANAGER::getInstance().getCurrentState())
+    // FIXME: This shouldn't be here; a global input manager should be used
+    auto state = GAME_MANAGER::getInstance().getCurrentState();
+    if (state == GAME_STATE::TITLE || state == GAME_STATE::GAME_OVER)
     {
-    case GAME_STATE::TITLE:
       GAME_MANAGER::getInstance().advanceState();
+    }
+
+    if (state != GAME_STATE::GAME_OVER)
+    {
       this->startJump();
-      break;
-    case GAME_STATE::IN_GAME:
-      this->startJump();
-      break;
-    case GAME_STATE::GAME_OVER:
-      GAME_MANAGER::getInstance().advanceState();
-      break;
     }
   }
 }
@@ -156,7 +154,8 @@ void NIKO::onStateChangedTo(GAME_STATE state)
   {
   case GAME_STATE::TITLE:
   {
-    this->setPosition(PLAYER_X_POS, FLOOR_Y_POS);
+    this->my_spritesheet_renderer->setSpritesheet("run"); // TODO: Add pause condition
+    this->my_position.y = FLOOR_Y_POS - 35;
     break;
   }
   case GAME_STATE::IN_GAME:
@@ -165,6 +164,8 @@ void NIKO::onStateChangedTo(GAME_STATE state)
   }
   case GAME_STATE::GAME_OVER:
   {
+    this->my_velocity.y = 0;
+    this->is_grounded   = true; // TODO: Add a separate isFrozen state
     break;
   }
   }

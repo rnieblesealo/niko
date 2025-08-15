@@ -98,6 +98,13 @@ void GAME_MANAGER::advanceState()
 
   this->current_state = static_cast<GAME_STATE>(next_state);
 
+  // Remove enemies when transitioning to title
+  // FIXME: Obstacles should actually belong to the scene haha
+  if (this->current_state == GAME_STATE::TITLE)
+  {
+    this->active_obstacles.clear();
+  }
+
   // Propagate state change to observers
   for (auto &observer : this->observers)
   {

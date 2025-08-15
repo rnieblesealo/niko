@@ -44,6 +44,10 @@ private:
   std::vector<std::pair<Rectangle, Texture2D &>> my_active_floor_props;
 
 public:
+  /**
+   * @param floor_texture The texture the floor will use
+   * For now, width should match screen width and height should match FLOOR_Y_POS
+   */
   explicit SCENE(const Texture2D &floor_texture);
 
   /**
