@@ -12,7 +12,7 @@ So this is a silly little game where I try to exercise all the practices they ta
 
 enojoy!
 
-This will also probably be the 404 page for my webste :]
+This will also probably make a kickass 404 page for my site www.rnieb.dev!
 
 ---
 
