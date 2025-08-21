@@ -13,7 +13,7 @@ private:
   /**
    * @brief List of current observers
    */
-  std::vector<std::reference_wrapper<GAME_OBJECT_INTF>> observers{};
+  std::vector<std::reference_wrapper<GAME_OBJECT_INTF>> observers{}; // NOTE: Should contracts have types?
 
 public:
   virtual ~MANAGER_INTF() = default;
