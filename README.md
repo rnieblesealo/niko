@@ -241,7 +241,7 @@ We can change the trigger but the action should stay the same; CoD allows you to
             "ADVANCE_STATE"
         },
         "ALPHA_W": {
-            `WALK_FORWARD`
+            "WALK_FORWARD"
         }
     }
 }
