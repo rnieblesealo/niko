@@ -1,6 +1,7 @@
 #include "constants.h"
 #include "game-manager.h"
 #include "gui.h"
+#include "input-manager.h"
 #include "niko.h"
 #include "scene.h"
 #include "spritesheet-renderer.h"
@@ -22,7 +23,7 @@ int main(void)
   SetTraceLogLevel(LOG_ALL);
 
   // =========================================================================================
-  // SETUP
+  // FONTS SETUP
   // =========================================================================================
 
   Font IMPACT_FONT = LoadFont("assets/impact.ttf");
@@ -90,6 +91,8 @@ int main(void)
     // =====================================================================================
     // UPDATE GAME LOGIC
     // =====================================================================================
+
+    INPUT_MANAGER::getInstance(); // TODO: Remove! For testing
 
     niko.update();
 

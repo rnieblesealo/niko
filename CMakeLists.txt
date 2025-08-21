@@ -15,6 +15,7 @@ add_executable(${PROJECT_NAME}
   src/gui.cpp
   src/scene.cpp
   src/game-manager.cpp
+  src/input-manager.cpp
 )
 
 if(APPLE)
