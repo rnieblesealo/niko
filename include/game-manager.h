@@ -53,11 +53,7 @@ private:
 
 public:
   // Singleton
-  static GAME_MANAGER &getInstance()
-  {
-    static GAME_MANAGER instance; // Static in C++ = instantiated only ONCE
-    return instance;
-  }
+  static GAME_MANAGER &getInstance();
 
   GAME_MANAGER(GAME_MANAGER const &) =
       delete; // Delete copy (why would we ever copy a SINGLEton?)

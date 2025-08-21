@@ -7,6 +7,13 @@ GAME_MANAGER::GAME_MANAGER()
           // Seed RNG engine with time
           std::chrono::system_clock::now().time_since_epoch().count())) {};
 
+GAME_MANAGER &GAME_MANAGER::getInstance()
+{
+
+  static GAME_MANAGER instance; // Static in C++ = instantiated only ONCE
+  return instance;
+}
+
 void GAME_MANAGER::runObstacleSpawner(
     std::vector<std::shared_ptr<Texture2D>> const &obstacle_texture_pool)
 {
