@@ -288,3 +288,16 @@ But wait...
 **Raylib doesn't return you a list of keys currently being pressed... Just the latest one :/**
 
 Everything's fucked, I'll come back to this later lol :P
+
+---
+
+After walking away for a while ive decided that we are all going to die anyways so well just do an observer and hard-bind input message to specific key
+
+Quick and dirty but fuck it we dont need more
+
+There will be enum actions (e.g. JUMP, PAUSE, etc)
+Upon receiving input, INPUT_MANAGER will run a callback on registered game object observers with the action enum corresponding to user input as param 
+The callback owner is responsible for interpreting this input as needed
+
+Pros: Easy as fuck
+Cons: No support for key rebinding (but I think it could be done quite easily) 
