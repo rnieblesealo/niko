@@ -1,5 +1,6 @@
 #include "constants.h"
 #include "game-manager.h"
+#include "game-object-intf.h"
 #include "gui.h"
 #include "input-manager.h"
 #include "niko.h"
@@ -91,8 +92,6 @@ int main(void)
     // =====================================================================================
     // UPDATE GAME LOGIC
     // =====================================================================================
-
-    INPUT_MANAGER::getInstance(); // TODO: Remove! For testing
 
     niko.update();
 

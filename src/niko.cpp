@@ -2,6 +2,7 @@
 #include "constants.h"
 #include "filesystem"
 #include "game-manager.h"
+#include "input-manager.h"
 #include "raylib.h"
 #include "types.h"
 
@@ -17,6 +18,7 @@ NIKO::NIKO(std::shared_ptr<SPRITESHEET_RENDERER> spritesheet_renderer)
 {
   // Need to dereference pointer since add observer takes a mutable ref
   GAME_MANAGER::getInstance().addObserver(*this);
+  INPUT_MANAGER::getInstance().addObserver(*this);
 }
 
 NIKO::~NIKO()
